@@ -33,13 +33,13 @@
 }
 
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html{-webkit-text-size-adjust:100%;}
+html{-webkit-text-size-adjust:100%;font-size:18px;}
+@media(max-width:480px){html{font-size:19px;}}
 html,body{height:100%;}
 body{
   margin:0;
   min-height:100vh;
   font-family:'Karla',system-ui,sans-serif;
-  font-size:16px;
   color:var(--ink);
   background:
     radial-gradient(ellipse 80vw 55vh at 10% 3%, rgba(122,32,54,0.5), transparent 60%),
@@ -244,8 +244,8 @@ header.page-header p{color:var(--ink-soft);font-size:0.98rem;max-width:480px;mar
   border:1px solid var(--glass-border);
   backdrop-filter:blur(16px) saturate(140%);
   -webkit-backdrop-filter:blur(16px) saturate(140%);
-  border-radius:14px;
-  margin-bottom:0.6rem;
+  border-radius:16px;
+  margin-bottom:0.75rem;
   overflow:hidden;
   transition:border-color 0.2s ease, background 0.2s ease;
 }
@@ -254,58 +254,60 @@ header.page-header p{color:var(--ink-soft);font-size:0.98rem;max-width:480px;mar
 .card summary{
   list-style:none;
   cursor:pointer;
-  padding:0.95rem 1rem;
+  padding:1.15rem 1.15rem;
   display:flex;
-  flex-wrap:wrap;
-  align-items:center;
-  gap:0.5rem 0.6rem;
-  min-height:48px;
+  align-items:flex-start;
+  gap:0.7rem;
 }
 .card summary::-webkit-details-marker{display:none;}
-.card summary::before{
-  content:"+";
-  font-weight:700;
-  font-size:1.05rem;
-  color:var(--ink-faint);
-  width:1rem;
-  text-align:center;
+.toggle-icon{
   flex-shrink:0;
+  width:1.2rem;
+  text-align:center;
+  font-weight:700;
+  font-size:1.3rem;
+  line-height:1.4rem;
+  color:var(--ink-faint);
 }
-.card[open] summary::before{content:"–";}
+.toggle-icon::before{content:"+";}
+.card[open] .toggle-icon::before{content:"–";}
 
-.item-name{font-weight:700;font-size:1.08rem;color:var(--ink);flex-shrink:0;}
-.item-name .sub{display:block;font-weight:400;font-size:0.86rem;color:var(--ink-faint);margin-top:0.15rem;}
-.price{font-size:0.92rem;color:var(--ink-faint);font-variant-numeric:tabular-nums;flex-shrink:0;}
+.summary-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:0.65rem;}
+.s-head{display:flex;justify-content:space-between;align-items:flex-start;gap:0.7rem;flex-wrap:wrap;}
+.item-name{font-weight:700;font-size:1.22rem;color:var(--ink);line-height:1.32;}
+.item-name .sub{display:block;font-weight:400;font-size:0.98rem;color:var(--ink-faint);margin-top:0.22rem;line-height:1.4;}
+.price{font-size:1.05rem;color:var(--ink-faint);font-variant-numeric:tabular-nums;flex-shrink:0;white-space:nowrap;}
 
-.chips{display:flex;flex-wrap:wrap;gap:0.4rem;margin-left:auto;align-items:center;}
-.chip{font-size:0.82rem;font-weight:700;padding:0.3rem 0.75rem;border-radius:99px;white-space:nowrap;}
+.s-meta{display:flex;flex-wrap:wrap;align-items:center;gap:0.55rem;}
+.chips{display:flex;flex-wrap:wrap;gap:0.5rem;}
+.chip{font-size:0.92rem;font-weight:700;padding:0.4rem 0.9rem;border-radius:99px;white-space:nowrap;}
 .chip-solid{background:var(--chip-solid-bg);color:var(--chip-solid-fg);}
 .chip-trace{background:var(--chip-trace-bg);color:var(--chip-trace-fg);font-weight:600;}
 .chip-none{background:transparent;color:var(--confirmed);border:1.4px solid var(--confirmed);}
 
 .status-pill{
   display:inline-flex;align-items:center;gap:0.3rem;
-  font-size:0.74rem;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;
-  padding:0.24rem 0.6rem;border-radius:99px;flex-shrink:0;
+  font-size:0.82rem;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;
+  padding:0.3rem 0.75rem;border-radius:99px;flex-shrink:0;
 }
 .status-confirmed{background:var(--confirmed-bg);color:var(--confirmed);}
 .status-draft{background:var(--draft-bg);color:var(--draft);}
 
-.item-body{padding:0 1rem 1.1rem 2.5rem;border-top:1px solid var(--glass-border);margin-top:-1px;}
-.component{padding:0.75rem 0;border-bottom:1px dashed var(--glass-border);}
+.item-body{padding:0 1.15rem 1.3rem 3rem;border-top:1px solid var(--glass-border);margin-top:-1px;}
+.component{padding:0.9rem 0;border-bottom:1px dashed var(--glass-border);}
 .component:last-child{border-bottom:none;}
-.component-name{font-weight:700;font-size:0.92rem;color:var(--ink);margin-bottom:0.25rem;}
-.component-name .flag{font-weight:600;color:var(--draft);font-size:0.82rem;}
-.ingredients{font-size:0.92rem;color:var(--ink-soft);line-height:1.55;margin:0 0 0.35rem;}
-.contributes{font-size:0.9rem;color:var(--ink);line-height:1.5;}
+.component-name{font-weight:700;font-size:1.03rem;color:var(--ink);margin-bottom:0.3rem;}
+.component-name .flag{font-weight:600;color:var(--draft);font-size:0.92rem;}
+.ingredients{font-size:1.03rem;color:var(--ink-soft);line-height:1.6;margin:0 0 0.4rem;}
+.contributes{font-size:1.01rem;color:var(--ink);line-height:1.55;}
 .contributes b{color:var(--gold);}
-.may-contain{font-size:0.85rem;color:var(--ink-faint);font-style:italic;line-height:1.5;}
+.may-contain{font-size:0.95rem;color:var(--ink-faint);font-style:italic;line-height:1.55;}
 
 .empty-state{
   text-align:center;
   padding:3rem 1rem;
   color:var(--ink-faint);
-  font-size:1rem;
+  font-size:1.05rem;
 }
 
 footer{
@@ -552,10 +554,17 @@ function renderDish(d){
 
   return `<details class="card" data-name="${d.name.toLowerCase()}" data-allergens="${d.allergens.join(',')}" data-trace="${d.trace.join(',')}">
     <summary>
-      <span class="item-name">${d.name}${d.sub ? `<span class="sub">${d.sub}</span>` : ""}</span>
-      <span class="price">${d.price}</span>
-      <span class="chips">${chips}${traceChips}</span>
-      <span class="status-pill ${statusClass}">${statusLabel}</span>
+      <span class="toggle-icon"></span>
+      <div class="summary-main">
+        <div class="s-head">
+          <span class="item-name">${d.name}${d.sub ? `<span class="sub">${d.sub}</span>` : ""}</span>
+          <span class="price">${d.price}</span>
+        </div>
+        <div class="s-meta">
+          <span class="status-pill ${statusClass}">${statusLabel}</span>
+          <span class="chips">${chips}${traceChips}</span>
+        </div>
+      </div>
     </summary>
     <div class="item-body">${body}${noteHtml}</div>
   </details>`;
