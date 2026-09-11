@@ -2,113 +2,132 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Traders Wine Bar — Allergen Check</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Karla:wght@400;500;600;700&display=swap">
 <style>
 :root{
-  --ink:#F7F4EE;
-  --ink-soft:#CEC8D9;
-  --ink-faint:#9A93AC;
-  --accent:#E7B872;
-  --accent-soft:rgba(231,184,114,0.18);
-  --glass-bg:rgba(255,255,255,0.06);
+  --ink:#F3ECE2;
+  --ink-soft:#D3C0C9;
+  --ink-faint:#A6919B;
+  --gold:#D8B25C;
+  --gold-soft:rgba(216,178,92,0.16);
+  --glass-bg:rgba(255,255,255,0.055);
   --glass-bg-strong:rgba(255,255,255,0.1);
-  --glass-border:rgba(255,255,255,0.16);
-  --glass-border-hover:rgba(231,184,114,0.45);
-  --shadow:0 8px 32px rgba(10,4,18,0.4);
-  --bg1:#1a0b1e;
-  --bg2:#2c0f28;
-  --bg3:#170a24;
+  --glass-border:rgba(216,178,92,0.2);
+  --glass-border-hover:rgba(216,178,92,0.55);
+  --shadow:0 10px 32px rgba(10,2,6,0.45);
+  --wine-950:#1D0810;
+  --wine-900:#33101B;
 
   --confirmed:#9FD8A8;
   --confirmed-bg:rgba(159,216,168,0.14);
   --draft:#F0C168;
   --draft-bg:rgba(240,193,104,0.16);
 
-  --chip-solid-bg:#F7F4EE;
-  --chip-solid-fg:#241220;
+  --chip-solid-bg:#F3ECE2;
+  --chip-solid-fg:#2A0A13;
   --chip-trace-bg:rgba(255,255,255,0.08);
   --chip-trace-fg:var(--ink-faint);
 }
 
-*{box-sizing:border-box;}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{-webkit-text-size-adjust:100%;}
 html,body{height:100%;}
 body{
   margin:0;
   min-height:100vh;
   font-family:'Karla',system-ui,sans-serif;
+  font-size:16px;
   color:var(--ink);
   background:
-    radial-gradient(ellipse 900px 600px at 10% 5%, rgba(122,32,54,0.5), transparent 60%),
-    radial-gradient(ellipse 800px 700px at 90% 90%, rgba(70,25,90,0.45), transparent 60%),
-    linear-gradient(160deg, var(--bg1), var(--bg2) 55%, var(--bg3));
+    radial-gradient(ellipse 80vw 55vh at 10% 3%, rgba(122,32,54,0.5), transparent 60%),
+    radial-gradient(ellipse 70vw 55vh at 92% 95%, rgba(76,21,36,0.5), transparent 60%),
+    linear-gradient(165deg, var(--wine-950), var(--wine-900) 55%, var(--wine-950));
   background-attachment:fixed;
-  padding:clamp(1.5rem,5vw,3rem) 1.25rem 5rem;
+  padding:0 0.85rem calc(3.5rem + env(safe-area-inset-bottom));
 }
 .wrap{max-width:900px;margin:0 auto;position:relative;z-index:1;}
 
-.crumbs{font-size:0.8rem;margin-bottom:1.4rem;}
+/* --- Sticky glass top bar --- */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  margin:0 -0.85rem;
+  padding:calc(0.75rem + env(safe-area-inset-top)) 0.85rem 0.7rem;
+  background:rgba(29,8,16,0.82);
+  backdrop-filter:blur(18px) saturate(150%);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  border-bottom:1px solid var(--glass-border);
+}
+.crumbs{font-size:0.78rem;margin:0 0 0.55rem;}
 .crumbs a{color:var(--ink-faint);text-decoration:none;}
-.crumbs a:hover{color:var(--accent);}
+.crumbs a:hover{color:var(--gold);}
 
-header{
-  text-align:center;
-  margin-bottom:2.2rem;
+.search-row{position:relative;}
+.search-row svg{
+  position:absolute;
+  left:0.9rem;
+  top:50%;
+  transform:translateY(-50%);
+  width:17px;height:17px;
+  color:var(--ink-faint);
+  pointer-events:none;
 }
-.eyebrow{
-  font-size:0.7rem;
-  letter-spacing:0.2em;
-  text-transform:uppercase;
-  color:var(--accent);
-  font-weight:700;
-  margin:0 0 0.7rem;
-}
-h1{
-  font-family:'Fraunces',serif;
-  font-weight:600;
-  font-size:clamp(2rem,5vw,2.9rem);
-  margin:0 0 0.6rem;
-  line-height:1.05;
-}
-h1 em{font-style:italic;font-weight:500;color:var(--accent);}
-header p{color:var(--ink-soft);font-size:0.9rem;max-width:520px;margin:0 auto;line-height:1.55;}
-
-/* --- Glass control panel --- */
-.panel{
-  background:var(--glass-bg);
-  border:1px solid var(--glass-border);
-  backdrop-filter:blur(20px) saturate(140%);
-  -webkit-backdrop-filter:blur(20px) saturate(140%);
-  border-radius:18px;
-  box-shadow:var(--shadow);
-  padding:1.4rem 1.5rem;
-  margin-bottom:2.2rem;
-}
-.search-row{display:flex;gap:0.7rem;align-items:center;margin-bottom:1.1rem;}
 .search-row input[type="text"]{
-  flex:1;
-  background:rgba(255,255,255,0.07);
+  width:100%;
+  background:rgba(255,255,255,0.075);
   border:1px solid var(--glass-border);
-  border-radius:12px;
-  padding:0.7rem 1rem;
+  border-radius:13px;
+  padding:0.85rem 1rem 0.85rem 2.6rem;
   color:var(--ink);
   font-family:'Karla',sans-serif;
-  font-size:0.95rem;
+  font-size:1rem;
+  min-height:48px;
   outline:none;
   transition:border-color 0.2s ease, background 0.2s ease;
 }
 .search-row input[type="text"]::placeholder{color:var(--ink-faint);}
 .search-row input[type="text"]:focus{border-color:var(--glass-border-hover);background:rgba(255,255,255,0.1);}
 
+/* --- Filter drawer --- */
+.filter-drawer{margin-top:0.65rem;}
+.filter-drawer summary{
+  list-style:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  font-size:0.82rem;
+  font-weight:700;
+  color:var(--gold);
+  padding:0.35rem 0.1rem;
+  min-height:32px;
+}
+.filter-drawer summary::-webkit-details-marker{display:none;}
+.filter-drawer summary::before{content:"▸";font-size:0.72rem;transition:transform 0.18s ease;}
+.filter-drawer[open] summary::before{transform:rotate(90deg);}
+.filter-drawer summary .badge{
+  background:var(--gold-soft);
+  color:var(--gold);
+  font-size:0.68rem;
+  font-weight:700;
+  padding:0.1rem 0.5rem;
+  border-radius:99px;
+  display:none;
+}
+.filter-drawer summary .badge.show{display:inline-block;}
+
+.filter-body{padding:0.8rem 0 0.3rem;}
 .mode-row{
   display:flex;
   flex-wrap:wrap;
   align-items:center;
   justify-content:space-between;
-  gap:0.8rem;
-  margin-bottom:1rem;
+  gap:0.7rem;
+  margin-bottom:0.85rem;
 }
 .mode-toggle{
   display:inline-flex;
@@ -125,13 +144,13 @@ header p{color:var(--ink-soft);font-size:0.9rem;max-width:520px;margin:0 auto;li
   font-family:'Karla',sans-serif;
   font-size:0.76rem;
   font-weight:700;
-  letter-spacing:0.02em;
-  padding:0.45rem 0.9rem;
+  padding:0.5rem 0.9rem;
+  min-height:38px;
   border-radius:99px;
   cursor:pointer;
   transition:background 0.2s ease, color 0.2s ease;
 }
-.mode-toggle button.active{background:var(--accent);color:#241220;}
+.mode-toggle button.active{background:var(--gold);color:#2A0A13;}
 
 .trace-toggle{
   display:flex;
@@ -141,14 +160,28 @@ header p{color:var(--ink-soft);font-size:0.9rem;max-width:520px;margin:0 auto;li
   color:var(--ink-soft);
   cursor:pointer;
   user-select:none;
+  min-height:38px;
 }
-.trace-toggle input{accent-color:var(--accent);width:15px;height:15px;cursor:pointer;}
+.trace-toggle input{accent-color:var(--gold);width:17px;height:17px;cursor:pointer;flex-shrink:0;}
 
-.chip-filter-row{display:flex;flex-wrap:wrap;gap:0.5rem;}
+.chip-filter-row{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:0.5rem;
+  overflow-x:auto;
+  padding-bottom:0.3rem;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.chip-filter-row::-webkit-scrollbar{display:none;}
+@media(min-width:700px){
+  .chip-filter-row{flex-wrap:wrap;overflow-x:visible;}
+}
 .chip-filter{
-  font-size:0.76rem;
+  font-size:0.78rem;
   font-weight:600;
-  padding:0.42rem 0.85rem;
+  padding:0.5rem 0.9rem;
+  min-height:38px;
   border-radius:99px;
   border:1px solid var(--glass-border);
   background:rgba(255,255,255,0.04);
@@ -156,33 +189,55 @@ header p{color:var(--ink-soft);font-size:0.9rem;max-width:520px;margin:0 auto;li
   cursor:pointer;
   transition:all 0.15s ease;
   font-family:'Karla',sans-serif;
+  white-space:nowrap;
+  flex-shrink:0;
 }
-.chip-filter:hover{border-color:var(--glass-border-hover);}
+.chip-filter:active{transform:scale(0.96);}
 .chip-filter.selected{
-  background:var(--accent);
-  border-color:var(--accent);
-  color:#241220;
+  background:var(--gold);
+  border-color:var(--gold);
+  color:#2A0A13;
 }
+
+header.page-header{
+  text-align:center;
+  padding:1.6rem 0 1.4rem;
+}
+.brand-mark{display:flex;justify-content:center;margin-bottom:0.6rem;}
+.brand-mark svg{width:24px;height:31px;color:var(--gold);}
+h1{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:clamp(1.7rem,7vw,2.7rem);
+  margin:0 0 0.55rem;
+  line-height:1.08;
+}
+h1 em{font-style:italic;font-weight:500;color:var(--gold);}
+header.page-header p{color:var(--ink-soft);font-size:0.88rem;max-width:480px;margin:0 auto;line-height:1.55;padding:0 0.5rem;}
 
 .results-count{
   font-size:0.78rem;
   color:var(--ink-faint);
-  margin:0 0 1.2rem;
+  margin:0.9rem 0 1.1rem;
   text-align:center;
 }
-.results-count b{color:var(--accent);}
+.results-count b{color:var(--gold);}
 
 .section-title{
   font-family:'Fraunces',serif;
   font-style:italic;
-  font-size:1.3rem;
+  font-size:1.25rem;
   font-weight:500;
-  color:var(--accent);
-  margin:2.4rem 0 0.8rem;
+  color:var(--gold);
+  margin:2.1rem 0 0.75rem;
   padding-bottom:0.4rem;
   border-bottom:1px solid var(--glass-border);
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
 }
 .section-title:first-of-type{margin-top:0;}
+.section-title svg{width:15px;height:19px;flex-shrink:0;opacity:0.85;}
 
 .card{
   background:var(--glass-bg);
@@ -190,25 +245,27 @@ header p{color:var(--ink-soft);font-size:0.9rem;max-width:520px;margin:0 auto;li
   backdrop-filter:blur(16px) saturate(140%);
   -webkit-backdrop-filter:blur(16px) saturate(140%);
   border-radius:14px;
-  margin-bottom:0.7rem;
+  margin-bottom:0.6rem;
   overflow:hidden;
   transition:border-color 0.2s ease, background 0.2s ease;
 }
-.card:hover{background:var(--glass-bg-strong);}
+.card:active{background:var(--glass-bg-strong);}
+@media(hover:hover){.card:hover{background:var(--glass-bg-strong);}}
 .card summary{
   list-style:none;
   cursor:pointer;
-  padding:0.95rem 1.1rem;
+  padding:0.95rem 1rem;
   display:flex;
   flex-wrap:wrap;
   align-items:center;
-  gap:0.6rem 0.7rem;
+  gap:0.5rem 0.6rem;
+  min-height:48px;
 }
 .card summary::-webkit-details-marker{display:none;}
 .card summary::before{
   content:"+";
   font-weight:700;
-  font-size:1rem;
+  font-size:1.05rem;
   color:var(--ink-faint);
   width:1rem;
   text-align:center;
@@ -217,11 +274,11 @@ header p{color:var(--ink-soft);font-size:0.9rem;max-width:520px;margin:0 auto;li
 .card[open] summary::before{content:"–";}
 
 .item-name{font-weight:700;font-size:0.94rem;color:var(--ink);flex-shrink:0;}
-.item-name .sub{display:block;font-weight:400;font-size:0.74rem;color:var(--ink-faint);margin-top:0.1rem;}
+.item-name .sub{display:block;font-weight:400;font-size:0.74rem;color:var(--ink-faint);margin-top:0.12rem;}
 .price{font-size:0.8rem;color:var(--ink-faint);font-variant-numeric:tabular-nums;flex-shrink:0;}
 
 .chips{display:flex;flex-wrap:wrap;gap:0.35rem;margin-left:auto;align-items:center;}
-.chip{font-size:0.7rem;font-weight:700;padding:0.22rem 0.6rem;border-radius:99px;white-space:nowrap;}
+.chip{font-size:0.7rem;font-weight:700;padding:0.24rem 0.6rem;border-radius:99px;white-space:nowrap;}
 .chip-solid{background:var(--chip-solid-bg);color:var(--chip-solid-fg);}
 .chip-trace{background:var(--chip-trace-bg);color:var(--chip-trace-fg);font-weight:600;}
 .chip-none{background:transparent;color:var(--confirmed);border:1.4px solid var(--confirmed);}
@@ -229,19 +286,19 @@ header p{color:var(--ink-soft);font-size:0.9rem;max-width:520px;margin:0 auto;li
 .status-pill{
   display:inline-flex;align-items:center;gap:0.3rem;
   font-size:0.62rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;
-  padding:0.18rem 0.5rem;border-radius:99px;flex-shrink:0;
+  padding:0.2rem 0.5rem;border-radius:99px;flex-shrink:0;
 }
 .status-confirmed{background:var(--confirmed-bg);color:var(--confirmed);}
 .status-draft{background:var(--draft-bg);color:var(--draft);}
 
-.item-body{padding:0 1.1rem 1.1rem 2.5rem;border-top:1px solid var(--glass-border);margin-top:-1px;}
+.item-body{padding:0 1rem 1.05rem 2.5rem;border-top:1px solid var(--glass-border);margin-top:-1px;}
 .component{padding:0.65rem 0;border-bottom:1px dashed var(--glass-border);}
 .component:last-child{border-bottom:none;}
 .component-name{font-weight:700;font-size:0.8rem;color:var(--ink);margin-bottom:0.2rem;}
 .component-name .flag{font-weight:600;color:var(--draft);font-size:0.7rem;}
 .ingredients{font-size:0.8rem;color:var(--ink-soft);line-height:1.5;margin:0 0 0.3rem;}
 .contributes{font-size:0.77rem;color:var(--ink);}
-.contributes b{color:var(--accent);}
+.contributes b{color:var(--gold);}
 .may-contain{font-size:0.74rem;color:var(--ink-faint);font-style:italic;}
 
 .empty-state{
@@ -252,10 +309,10 @@ header p{color:var(--ink-soft);font-size:0.9rem;max-width:520px;margin:0 auto;li
 }
 
 footer{
-  margin-top:3rem;
-  padding-top:1.2rem;
+  margin-top:2.6rem;
+  padding-top:1.1rem;
   border-top:1px solid var(--glass-border);
-  font-size:0.76rem;
+  font-size:0.75rem;
   color:var(--ink-faint);
   line-height:1.6;
   text-align:center;
@@ -265,30 +322,42 @@ footer{
 <body>
 <div class="wrap">
 
-<p class="crumbs"><a href="../">← All venues</a></p>
-
-<header>
-  <p class="eyebrow">Traders Wine Bar</p>
-  <h1>Find what's <em>safe</em> to order</h1>
-  <p>Search a dish, or filter by allergen to see what's left. All data is sourced from supplier &amp; packaging labels — click any dish to see exactly where each allergen comes from.</p>
-</header>
-
-<div class="panel">
+<div class="topbar">
+  <p class="crumbs"><a href="../">← All venues</a></p>
   <div class="search-row">
-    <input type="text" id="search" placeholder="Search a dish… e.g. halloumi, olives, cheese">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input type="text" id="search" placeholder="Search a dish… halloumi, olives, cheese">
   </div>
-  <div class="mode-row">
-    <div class="mode-toggle" role="group" aria-label="Filter mode">
-      <button type="button" id="modeHide" class="active">Hide selected</button>
-      <button type="button" id="modeShow">Show only selected</button>
+  <details class="filter-drawer" id="filterDrawer">
+    <summary>Filter by allergen <span class="badge" id="filterBadge">0</span></summary>
+    <div class="filter-body">
+      <div class="mode-row">
+        <div class="mode-toggle" role="group" aria-label="Filter mode">
+          <button type="button" id="modeHide" class="active">Hide selected</button>
+          <button type="button" id="modeShow">Show only selected</button>
+        </div>
+        <label class="trace-toggle">
+          <input type="checkbox" id="includeTrace">
+          Also match "may contain" traces
+        </label>
+      </div>
+      <div class="chip-filter-row" id="allergenFilters"></div>
     </div>
-    <label class="trace-toggle">
-      <input type="checkbox" id="includeTrace">
-      Also match "may contain" traces
-    </label>
-  </div>
-  <div class="chip-filter-row" id="allergenFilters"></div>
+  </details>
 </div>
+
+<header class="page-header">
+  <div class="brand-mark">
+    <svg viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3 C5 3 4 13 8 16 C10.3 17.7 13.7 17.7 16 16 C20 13 19 3 19 3 Z"/>
+      <path d="M12 17 L12 27"/>
+      <path d="M7 30 L17 30"/>
+      <path d="M12 27 C9.4 27 7.4 28.6 7 30 M12 27 C14.6 27 16.6 28.6 17 30"/>
+    </svg>
+  </div>
+  <h1>Traders <em>Wine Bar</em></h1>
+  <p>Search a dish, or filter by allergen to see what's left. Tap any dish to see exactly where each allergen comes from.</p>
+</header>
 
 <p class="results-count" id="resultsCount"></p>
 
@@ -305,6 +374,13 @@ const ALLERGENS = {
   CE:"Celery", GL:"Cereals (Gluten)", CR:"Crustaceans", EG:"Eggs", FI:"Fish",
   LU:"Lupin", MI:"Milk", MO:"Molluscs", MU:"Mustard", NU:"Nuts",
   PE:"Peanuts", SE:"Sesame", SO:"Soya", SU:"Sulphites"
+};
+
+const SECTION_ICONS = {
+  "Snack": '<svg viewBox="0 0 20 26" fill="currentColor"><circle cx="6" cy="16" r="4.2"/><circle cx="14" cy="16" r="4.2"/><circle cx="10" cy="9" r="4.2"/><circle cx="10" cy="21" r="4.2"/><path d="M10 2 C10 2 8 4 10 6" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>',
+  "Sharing is Caring": '<svg viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3 C5 3 4 13 8 16 C10.3 17.7 13.7 17.7 16 16 C20 13 19 3 19 3 Z"/><path d="M12 17 L12 27"/><path d="M7 30 L17 30"/><path d="M12 27 C9.4 27 7.4 28.6 7 30 M12 27 C14.6 27 16.6 28.6 17 30"/></svg>',
+  "Bruschetta Selection": '<svg viewBox="0 0 16 30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 L10 2 L10 8 L12 11 L12 27 C12 28.5 10.5 29 8 29 C5.5 29 4 28.5 4 27 L4 11 L6 8 Z"/><path d="M4 15 L12 15"/></svg>',
+  "Platters Selection": '<svg viewBox="0 0 20 26" fill="currentColor"><circle cx="6" cy="16" r="4.2"/><circle cx="14" cy="16" r="4.2"/><circle cx="10" cy="9" r="4.2"/><circle cx="10" cy="21" r="4.2"/></svg>'
 };
 
 const DISHES = [
@@ -490,7 +566,7 @@ function renderMenu(){
   menuEl.innerHTML = SECTIONS.map(sec => {
     const items = DISHES.filter(d=>d.section===sec).map(renderDish).join("");
     return `<div class="section-block" data-section="${sec}">
-      <div class="section-title">${sec}</div>
+      <div class="section-title">${SECTION_ICONS[sec] || ""}${sec}</div>
       ${items}
     </div>`;
   }).join("");
@@ -499,6 +575,7 @@ renderMenu();
 
 // --- Allergen filter chips ---
 const filterRow = document.getElementById("allergenFilters");
+const filterBadge = document.getElementById("filterBadge");
 let selectedAllergens = new Set();
 Object.entries(ALLERGENS).forEach(([code,name])=>{
   const btn = document.createElement("button");
@@ -509,10 +586,16 @@ Object.entries(ALLERGENS).forEach(([code,name])=>{
   btn.addEventListener("click", ()=>{
     if(selectedAllergens.has(code)){ selectedAllergens.delete(code); btn.classList.remove("selected"); }
     else { selectedAllergens.add(code); btn.classList.add("selected"); }
+    updateBadge();
     applyFilters();
   });
   filterRow.appendChild(btn);
 });
+
+function updateBadge(){
+  filterBadge.textContent = selectedAllergens.size;
+  filterBadge.classList.toggle("show", selectedAllergens.size > 0);
+}
 
 // --- Mode toggle ---
 let mode = "hide";
