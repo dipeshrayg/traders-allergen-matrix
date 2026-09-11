@@ -59,10 +59,16 @@ Ingredients: Peanuts, Wheat Flour, Sugar, Corn Starch, Corn Flour, Palm Oil, Soy
 Allergens: PEANUTS, CEREALS/GLUTEN (wheat), SOYA, MUSTARD
 May contain (cross-contamination, packed on site handling): Nuts, Sesame
 
-### Balsamic Vinegar (for Sourdough Bread, Olive Oil & Balsamic Vinegar dish) — 2 products seen, both same profile
-Ingredients: Cooked grape must, Wine vinegar, Colouring E150d (some variants also: glucose-fructose syrup, modified starch)
-Allergens: SULPHUR DIOXIDE/SULPHITES
-NOTE: still need — Sourdough bread ingredients, and plain Olive Oil ingredients label, for this dish
+### Sourdough Bread, Olive Oil & Balsamic Vinegar — RESOLVED
+Component - Balsamic Vinegar: Cooked grape must, Wine vinegar, Colouring E150d
+  Allergens: SULPHUR DIOXIDE/SULPHITES
+Component - Sourdough Bread: no formal label available — confirmed by owner as a standard gluten sourdough
+  Allergens: CEREALS/GLUTEN (wheat)
+Component - Olive Oil (La Española Extra Virgin Olive Oil): 100% olive oil (Picual, Arbequina, Hojiblanca blend), suitable for vegans/vegetarians
+  Allergens: NONE
+DISH TOTAL ALLERGENS: CEREALS/GLUTEN, SULPHUR DIOXIDE/SULPHITES
+
+GENERAL BREAD NOTE (owner confirmed): where no specific bread label exists, house bread is a standard gluten sourdough — apply CEREALS/GLUTEN to ciabatta/breadbasket items below on that basis.
 
 ---
 ## Sharing is Caring
@@ -129,52 +135,58 @@ DISH TOTAL ALLERGENS: MILK
 ## Bruschetta Selection
 NOTE: bread/flatbread base label still needed — applies to all 4 items below
 
-### Chilli Oil, Fresh Garlic, Black Pepper and Classic Tomatoes (topping only)
+### Chilli Oil, Fresh Garlic, Black Pepper and Classic Tomatoes (topping only) — RESOLVED
 Ingredients: Chilli Oil (Extra Virgin Olive Oil, Natural Chilli Extract), Fresh Garlic, Black Pepper, Tomatoes
 Allergens: NONE
-(if balsamic glaze drizzle used: add SULPHUR DIOXIDE/SULPHITES)
-BREAD BASE: confirmed CIABATTA — actual label still needed, assume CEREALS/GLUTEN until confirmed
-DISH TOTAL (assuming ciabatta): CEREALS/GLUTEN
+BREAD BASE: ciabatta — no formal label available, treated as gluten sourdough per owner (see general note above)
+DISH TOTAL: CEREALS/GLUTEN
 
-### Pesto & Sundried Tomatoes (topping only)
+### Pesto & Sundried Tomatoes (topping only) — RESOLVED
 Component - Pesto Genovese: Basil (51%), Sunflower Oil, Cheese (Milk) (Preservative Egg Lysozyme), Cashew Nuts, Extra Virgin Olive Oil, Potato Flakes, Salt, Sugar, Yeast Extract, Pine Nuts, Garlic, Acidity Regulator, Antioxidant
   Allergens: MILK, EGG, NUTS (cashew, pine nuts)
   May also contain: Celery, Fish, other Nuts
 Component - Semi-Dried Tomatoes in Sunflower Oil: Italian Semi-Dried Tomatoes (57%), Sunflower Oil, Sea Salt, Garlic, Oregano, Acidity Regulator
   Allergens: NONE
-BREAD BASE: ciabatta (see note above)
-DISH TOTAL (assuming ciabatta): MILK, EGG, NUTS, CEREALS/GLUTEN
+BREAD BASE: ciabatta — treated as gluten sourdough (see general note above)
+DISH TOTAL: MILK, EGG, NUTS, CEREALS/GLUTEN
 
-### Blue Cheese, Walnuts & Honey (topping only)
+### Blue Cheese, Walnuts & Honey (topping only) — RESOLVED
 Component - Walnut Halves: 100% Walnuts
   Allergens: NUTS
   May contain: Peanuts, Sesame, Mustard, Soya, Cereals/Gluten
 Component - Blossom Honey: 100% Honey
   Allergens: NONE
-Component - Blue Cheese: LABEL NOT YET PROVIDED — provisionally MILK (standard for blue cheese), confirm with actual label
-BREAD BASE: ciabatta (label still needed)
-DISH TOTAL (provisional): MILK, NUTS, CEREALS/GLUTEN
+Component - Blue Cheese: Pasteurised Cow's Milk, Salt, Rennet, Starter Culture, Blue Mould. Label states "Contains Milk". Suitable for vegetarians.
+  Allergens: MILK
+BREAD BASE: ciabatta — treated as gluten sourdough (see general note above)
+DISH TOTAL: MILK, NUTS, CEREALS/GLUTEN
 
-### Mortadella & Pistachio Flatbread with Crumbled Feta Cheese
+### Mortadella & Pistachio Flatbread with Crumbled Feta Cheese — RESOLVED
 Component - Mortadella (Gran Bosco): Pork Meat (95%), Potato Starch, Salt, Dextrose, Natural Flavours, Spices, Antioxidant E301, Preservative E250
   Allergens: NONE declared
 Component - Flatbread base (Authentic Greek Flatbread No.16, Albion): Wheat Flour, Water, Improvers (Ascorbic Acid, L-Cysteine), Sugar, Yeast, Salt, Sunflower Oil, Preservative (Sorbic Acid), Enzymes
   Allergens: CEREALS/GLUTEN (wheat)
   May contain traces of: Milk, Lupin, Mustard, Sesame, Soya
 Component - Feta Cheese: (see Greek Summer Salad entry) — MILK
-Component - Pistachio: LABEL NOT YET PROVIDED — expect NUTS allergen, confirm with actual label
-DISH TOTAL (provisional, pending pistachio): CEREALS/GLUTEN, MILK, NUTS
+Component - Pistachio: 100% Pistachio
+  Allergens: NUTS
+DISH TOTAL: CEREALS/GLUTEN, MILK, NUTS
 
 ---
 ## Platters Selection
 
-### Cheese Platter — Pecorino, Manchego, Comté, Brillat-Savarin + figs, grapes, honey
+### Cheese Platter — Pecorino, Manchego, Comté, Brillat-Savarin + figs, grapes, honey — RESOLVED
 Component - Figs, Grapes, Honey: NONE
-Component - Pecorino: LABEL NOT YET PROVIDED — expect MILK (sheep)
-Component - Manchego: LABEL NOT YET PROVIDED — expect MILK (sheep)
-Component - Comté: LABEL NOT YET PROVIDED — expect MILK (cow)
-Component - Brillat-Savarin: LABEL NOT YET PROVIDED — expect MILK (cow)
-DISH TOTAL (provisional): MILK
+Component - Pecorino: Sheep Milk, Lactic Ferment, Rennet, Salt. Label states "Contains Milk".
+  Allergens: MILK
+Component - Manchego: Spanish sheep's milk cheese (firm texture, nutty/buttery flavour) — no formal ingredient label, but sheep's milk cheese by definition
+  Allergens: MILK
+Component - Comté: Unpasteurised Cows Milk, Salt, Rennet, Starter. Label states "Contains Milk".
+  Allergens: MILK
+Component - Brillat-Savarin: Pasteurised Cows Milk, Salt, Lactic Culture, Animal Rennet, Calcium Chloride (E509). Label states "Contains Milk".
+  Allergens: MILK
+Component - Breadbasket: gluten sourdough (see general bread note) — CEREALS/GLUTEN
+DISH TOTAL: MILK, CEREALS/GLUTEN
 
 ### Charcuterie Platter — Salami, Coppa, Chorizo, Mortadella, Prosciutto, Bresaola + gherkins, tomato, chutney
 Component - Milano Raw Salami: Pork meat, Salt, Dextrose, Sucrose, Aromas, Spices, Antioxidant E301, Preservatives E252/E250
@@ -187,11 +199,18 @@ Component - Mortadella (Gran Bosco): (see Bruschetta entry) — NONE declared
 Component - Prosciutto: LABEL NOT YET PROVIDED
 Component - Bresaola: LABEL NOT YET PROVIDED
 Component - Gherkins, Tomato: NONE
-Component - Chutney: TO BE SENT (user confirmed tomorrow)
-DISH TOTAL (provisional, pending prosciutto/bresaola/chutney): NONE so far
+Component - Chutney (Cottage Delight Foodservice — Balsamic Red Onion Marmalade): Red Onion (54%), Demerara Sugar, Balsamic Vinegar (Wine Vinegar, Grape Must, Colour: Sulphite Ammonia Caramel, Preservative: Sulphur Dioxide), White Wine Vinegar, Muscovado Sugar, Corn Flour. Gluten Free, suitable for vegetarians/vegans.
+  Allergens: SULPHUR DIOXIDE/SULPHITES
+Component - Breadbasket: gluten sourdough (see general bread note) — CEREALS/GLUTEN
+DISH TOTAL (provisional, pending prosciutto/bresaola): CEREALS/GLUTEN, SULPHUR DIOXIDE/SULPHITES
+
+### Breadbasket (accompanies all 4 platters)
+Component - Bread: no formal label available — treated as standard gluten sourdough per owner (see general bread note)
+  Allergens: CEREALS/GLUTEN
 
 ### Small Platter — 3 Cheeses & 3 Meats + Breadbasket (subset of Cheese Platter + Charcuterie Platter items, same garnish: figs, grapes, tomato, gherkins, chutney)
 No new ingredients — allergens = whichever of the 4 cheeses / 4 meats above are selected. IMPORTANT FOR CUSTOMER REPORT: since exact 3-of-4 selection may vary, safest approach is to declare the UNION of all 4 cheeses + all 4 meats' allergens for this platter (i.e. same as Large Platter) unless staff can confirm the exact 3 items per order.
+DISH TOTAL (provisional, pending prosciutto/bresaola): MILK, CEREALS/GLUTEN, SULPHUR DIOXIDE/SULPHITES
 
 ### Large Platter — 4 Cheeses & 4 Meats + Breadbasket (same garnish: figs, grapes, tomato, gherkins, chutney)
-DISH TOTAL = union of Cheese Platter + Charcuterie Platter + Breadbasket allergens (pending remaining labels)
+DISH TOTAL (provisional, pending prosciutto/bresaola): MILK, CEREALS/GLUTEN, SULPHUR DIOXIDE/SULPHITES

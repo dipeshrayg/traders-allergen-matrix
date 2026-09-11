@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traders Wine Bar — Allergen Check</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Karla:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ink:#F7F4EE;
+  --ink-soft:#CEC8D9;
+  --ink-faint:#9A93AC;
+  --accent:#E7B872;
+  --accent-soft:rgba(231,184,114,0.18);
+  --glass-bg:rgba(255,255,255,0.06);
+  --glass-bg-strong:rgba(255,255,255,0.1);
+  --glass-border:rgba(255,255,255,0.16);
+  --glass-border-hover:rgba(231,184,114,0.45);
+  --shadow:0 8px 32px rgba(10,4,18,0.4);
+  --bg1:#1a0b1e;
+  --bg2:#2c0f28;
+  --bg3:#170a24;
+
+  --confirmed:#9FD8A8;
+  --confirmed-bg:rgba(159,216,168,0.14);
+  --draft:#F0C168;
+  --draft-bg:rgba(240,193,104,0.16);
+
+  --chip-solid-bg:#F7F4EE;
+  --chip-solid-fg:#241220;
+  --chip-trace-bg:rgba(255,255,255,0.08);
+  --chip-trace-fg:var(--ink-faint);
+}
+
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:'Karla',system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(ellipse 900px 600px at 10% 5%, rgba(122,32,54,0.5), transparent 60%),
+    radial-gradient(ellipse 800px 700px at 90% 90%, rgba(70,25,90,0.45), transparent 60%),
+    linear-gradient(160deg, var(--bg1), var(--bg2) 55%, var(--bg3));
+  background-attachment:fixed;
+  padding:clamp(1.5rem,5vw,3rem) 1.25rem 5rem;
+}
+.wrap{max-width:900px;margin:0 auto;position:relative;z-index:1;}
+
+.crumbs{font-size:0.8rem;margin-bottom:1.4rem;}
+.crumbs a{color:var(--ink-faint);text-decoration:none;}
+.crumbs a:hover{color:var(--accent);}
+
+header{
+  text-align:center;
+  margin-bottom:2.2rem;
+}
+.eyebrow{
+  font-size:0.7rem;
+  letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:var(--accent);
+  font-weight:700;
+  margin:0 0 0.7rem;
+}
+h1{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:clamp(2rem,5vw,2.9rem);
+  margin:0 0 0.6rem;
+  line-height:1.05;
+}
+h1 em{font-style:italic;font-weight:500;color:var(--accent);}
+header p{color:var(--ink-soft);font-size:0.9rem;max-width:520px;margin:0 auto;line-height:1.55;}
+
+/* --- Glass control panel --- */
+.panel{
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(20px) saturate(140%);
+  -webkit-backdrop-filter:blur(20px) saturate(140%);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+  padding:1.4rem 1.5rem;
+  margin-bottom:2.2rem;
+}
+.search-row{display:flex;gap:0.7rem;align-items:center;margin-bottom:1.1rem;}
+.search-row input[type="text"]{
+  flex:1;
+  background:rgba(255,255,255,0.07);
+  border:1px solid var(--glass-border);
+  border-radius:12px;
+  padding:0.7rem 1rem;
+  color:var(--ink);
+  font-family:'Karla',sans-serif;
+  font-size:0.95rem;
+  outline:none;
+  transition:border-color 0.2s ease, background 0.2s ease;
+}
+.search-row input[type="text"]::placeholder{color:var(--ink-faint);}
+.search-row input[type="text"]:focus{border-color:var(--glass-border-hover);background:rgba(255,255,255,0.1);}
+
+.mode-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:0.8rem;
+  margin-bottom:1rem;
+}
+.mode-toggle{
+  display:inline-flex;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--glass-border);
+  border-radius:99px;
+  padding:0.2rem;
+  gap:0.2rem;
+}
+.mode-toggle button{
+  border:none;
+  background:transparent;
+  color:var(--ink-soft);
+  font-family:'Karla',sans-serif;
+  font-size:0.76rem;
+  font-weight:700;
+  letter-spacing:0.02em;
+  padding:0.45rem 0.9rem;
+  border-radius:99px;
+  cursor:pointer;
+  transition:background 0.2s ease, color 0.2s ease;
+}
+.mode-toggle button.active{background:var(--accent);color:#241220;}
+
+.trace-toggle{
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  font-size:0.78rem;
+  color:var(--ink-soft);
+  cursor:pointer;
+  user-select:none;
+}
+.trace-toggle input{accent-color:var(--accent);width:15px;height:15px;cursor:pointer;}
+
+.chip-filter-row{display:flex;flex-wrap:wrap;gap:0.5rem;}
+.chip-filter{
+  font-size:0.76rem;
+  font-weight:600;
+  padding:0.42rem 0.85rem;
+  border-radius:99px;
+  border:1px solid var(--glass-border);
+  background:rgba(255,255,255,0.04);
+  color:var(--ink-soft);
+  cursor:pointer;
+  transition:all 0.15s ease;
+  font-family:'Karla',sans-serif;
+}
+.chip-filter:hover{border-color:var(--glass-border-hover);}
+.chip-filter.selected{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#241220;
+}
+
+.results-count{
+  font-size:0.78rem;
+  color:var(--ink-faint);
+  margin:0 0 1.2rem;
+  text-align:center;
+}
+.results-count b{color:var(--accent);}
+
+.section-title{
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-size:1.3rem;
+  font-weight:500;
+  color:var(--accent);
+  margin:2.4rem 0 0.8rem;
+  padding-bottom:0.4rem;
+  border-bottom:1px solid var(--glass-border);
+}
+.section-title:first-of-type{margin-top:0;}
+
+.card{
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+  border-radius:14px;
+  margin-bottom:0.7rem;
+  overflow:hidden;
+  transition:border-color 0.2s ease, background 0.2s ease;
+}
+.card:hover{background:var(--glass-bg-strong);}
+.card summary{
+  list-style:none;
+  cursor:pointer;
+  padding:0.95rem 1.1rem;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:0.6rem 0.7rem;
+}
+.card summary::-webkit-details-marker{display:none;}
+.card summary::before{
+  content:"+";
+  font-weight:700;
+  font-size:1rem;
+  color:var(--ink-faint);
+  width:1rem;
+  text-align:center;
+  flex-shrink:0;
+}
+.card[open] summary::before{content:"–";}
+
+.item-name{font-weight:700;font-size:0.94rem;color:var(--ink);flex-shrink:0;}
+.item-name .sub{display:block;font-weight:400;font-size:0.74rem;color:var(--ink-faint);margin-top:0.1rem;}
+.price{font-size:0.8rem;color:var(--ink-faint);font-variant-numeric:tabular-nums;flex-shrink:0;}
+
+.chips{display:flex;flex-wrap:wrap;gap:0.35rem;margin-left:auto;align-items:center;}
+.chip{font-size:0.7rem;font-weight:700;padding:0.22rem 0.6rem;border-radius:99px;white-space:nowrap;}
+.chip-solid{background:var(--chip-solid-bg);color:var(--chip-solid-fg);}
+.chip-trace{background:var(--chip-trace-bg);color:var(--chip-trace-fg);font-weight:600;}
+.chip-none{background:transparent;color:var(--confirmed);border:1.4px solid var(--confirmed);}
+
+.status-pill{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  font-size:0.62rem;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;
+  padding:0.18rem 0.5rem;border-radius:99px;flex-shrink:0;
+}
+.status-confirmed{background:var(--confirmed-bg);color:var(--confirmed);}
+.status-draft{background:var(--draft-bg);color:var(--draft);}
+
+.item-body{padding:0 1.1rem 1.1rem 2.5rem;border-top:1px solid var(--glass-border);margin-top:-1px;}
+.component{padding:0.65rem 0;border-bottom:1px dashed var(--glass-border);}
+.component:last-child{border-bottom:none;}
+.component-name{font-weight:700;font-size:0.8rem;color:var(--ink);margin-bottom:0.2rem;}
+.component-name .flag{font-weight:600;color:var(--draft);font-size:0.7rem;}
+.ingredients{font-size:0.8rem;color:var(--ink-soft);line-height:1.5;margin:0 0 0.3rem;}
+.contributes{font-size:0.77rem;color:var(--ink);}
+.contributes b{color:var(--accent);}
+.may-contain{font-size:0.74rem;color:var(--ink-faint);font-style:italic;}
+
+.empty-state{
+  text-align:center;
+  padding:3rem 1rem;
+  color:var(--ink-faint);
+  font-size:0.9rem;
+}
+
+footer{
+  margin-top:3rem;
+  padding-top:1.2rem;
+  border-top:1px solid var(--glass-border);
+  font-size:0.76rem;
+  color:var(--ink-faint);
+  line-height:1.6;
+  text-align:center;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p class="crumbs"><a href="../">← All venues</a></p>
+
+<header>
+  <p class="eyebrow">Traders Wine Bar</p>
+  <h1>Find what's <em>safe</em> to order</h1>
+  <p>Search a dish, or filter by allergen to see what's left. All data is sourced from supplier &amp; packaging labels — click any dish to see exactly where each allergen comes from.</p>
+</header>
+
+<div class="panel">
+  <div class="search-row">
+    <input type="text" id="search" placeholder="Search a dish… e.g. halloumi, olives, cheese">
+  </div>
+  <div class="mode-row">
+    <div class="mode-toggle" role="group" aria-label="Filter mode">
+      <button type="button" id="modeHide" class="active">Hide selected</button>
+      <button type="button" id="modeShow">Show only selected</button>
+    </div>
+    <label class="trace-toggle">
+      <input type="checkbox" id="includeTrace">
+      Also match "may contain" traces
+    </label>
+  </div>
+  <div class="chip-filter-row" id="allergenFilters"></div>
+</div>
+
+<p class="results-count" id="resultsCount"></p>
+
+<div id="menu"></div>
+
+<footer>
+  Allergens are declared per UK Food Information Regulations (14 major allergens). Dishes marked <b style="color:var(--draft)">Draft</b> still have one or more ingredients awaiting label confirmation — please check with a member of staff before ordering these.
+</footer>
+
+</div>
+
+<script>
+const ALLERGENS = {
+  CE:"Celery", GL:"Cereals (Gluten)", CR:"Crustaceans", EG:"Eggs", FI:"Fish",
+  LU:"Lupin", MI:"Milk", MO:"Molluscs", MU:"Mustard", NU:"Nuts",
+  PE:"Peanuts", SE:"Sesame", SO:"Soya", SU:"Sulphites"
+};
+
+const DISHES = [
+{section:"Snack", name:"Nocellara Green Olives", price:"£6.90", status:"confirmed",
+  allergens:[], trace:[],
+  components:[
+    {name:"Whole product", ingredients:"Olives, Water, Salt, Citric Acid (E330)", contributes:"No allergens present."}
+  ]},
+{section:"Snack", name:"Roasted Cashews", price:"£6.90", status:"confirmed",
+  allergens:["NU"], trace:["PE","SE","MU","GL","SO"],
+  components:[
+    {name:"Whole product — Albion Fine Foods", ingredients:"Cashew Nuts, Rapeseed Oil, Salt", contributes:"Contributes: <b>Nuts</b> (cashew).", may:"Packed on premises handling peanuts, sesame, mustard, soya, cereals containing gluten."}
+  ]},
+{section:"Snack", name:"Roasted Almonds", price:"£6.90", status:"confirmed",
+  allergens:["NU"], trace:["PE","SE","MU","GL"],
+  components:[
+    {name:"Whole product — Albion Fine Foods", ingredients:"Almonds, Vegetable Oil, Salt", contributes:"Contributes: <b>Nuts</b> (almond).", may:"Packed on premises handling peanuts, sesame, mustard, cereals containing gluten."}
+  ]},
+{section:"Snack", name:"Roasted Pecans", sub:"honey-glazed", price:"£6.00", status:"confirmed",
+  allergens:["NU"], trace:["PE","MU","SE","SO","GL"],
+  components:[
+    {name:"Whole product — Albion Fine Foods", ingredients:"Pecan Nuts (56%), Sugar, Honey (3%)", contributes:"Contributes: <b>Nuts</b> (pecan).", may:"Packed on premises handling peanuts, mustard, sesame, soya, cereals containing gluten."}
+  ]},
+{section:"Snack", name:"Wasabi Nuts", sub:"wasabi peanuts", price:"£6.00", status:"confirmed",
+  allergens:["PE","GL","SO","MU"], trace:["NU","SE"],
+  components:[
+    {name:"Whole product — Albion Fine Foods", ingredients:"Peanuts, Wheat Flour, Sugar, Corn Starch, Corn Flour, Palm Oil, Soy Sauce Powder (wheat, soybean), Seasoning (mustard flavour), Raising Agent, Potato Starch, Flavour Enhancer", contributes:"Contributes: <b>Peanuts</b>, <b>Gluten</b> (wheat), <b>Soya</b>, <b>Mustard</b>.", may:"May contain nuts, sesame."}
+  ]},
+{section:"Snack", name:"Sourdough Bread, Olive Oil & Balsamic Vinegar", price:"£7.50", status:"confirmed",
+  allergens:["GL","SU"], trace:[],
+  components:[
+    {name:"Sourdough Bread", ingredients:"No formal label — confirmed by owner as a standard gluten sourdough", contributes:"Contributes: <b>Gluten</b> (wheat)."},
+    {name:"Olive Oil (La Española Extra Virgin Olive Oil)", ingredients:"100% olive oil (Picual, Arbequina, Hojiblanca blend). Suitable for vegans/vegetarians.", contributes:"No allergens."},
+    {name:"Balsamic Vinegar", ingredients:"Cooked grape must, Wine vinegar, Colouring (E150d)", contributes:"Contributes: <b>Sulphites</b>."}
+  ]},
+
+{section:"Sharing is Caring", name:"Truffle Oil & Parmesan Fries", price:"£7.50", status:"confirmed",
+  allergens:["MI"], trace:[],
+  components:[
+    {name:"Fries", ingredients:"Potatoes, Coating (modified potato starch, rice flour, potato starch, raising agents, vegetable oils, turmeric), Dextrose, Spice extract", contributes:"No allergens (gluten-free coating)."},
+    {name:"Truffle Oil", ingredients:"Extra Virgin Olive Oil, White Truffle flavour", contributes:"No allergens."},
+    {name:"Parmesan", ingredients:"Milk, Salt, Rennet", contributes:"Contributes: <b>Milk</b>."}
+  ]},
+{section:"Sharing is Caring", name:"Halloumi Fries", sub:"with sweet chilli sauce", price:"£8.90", status:"confirmed",
+  allergens:["MI","GL"], trace:["EG","SO","SE","PE","NU"],
+  components:[
+    {name:"Halloumi Fries (Frostkrone)", ingredients:"Halloumi Cheese (Cow's, Goat's, Sheep's Milk), Wheat Flour, Water, Rapeseed Oil, Rice Flour, Wheat Starch, Potato Starch, Raising Agents, Emulsifier, Yeast", contributes:"Contributes: <b>Milk</b>, <b>Gluten</b> (wheat).", may:"May also contain egg, soya."},
+    {name:"Sweet Chilli Dipping Sauce", ingredients:"Water, Sugar, Red Chillies, Ground Garlic, Modified Tapioca Starch, Acetic Acid, Salt", contributes:"No allergens.", may:"May contain sesame, peanuts, nuts."}
+  ]},
+{section:"Sharing is Caring", name:"Truffle Arancini & Dip", price:"£9.90", status:"confirmed",
+  allergens:["GL","MI","SO","SU"], trace:["CR","FI","MO","EG","MU"],
+  components:[
+    {name:"Arancini (Carisma)", ingredients:"Cooked rice, Italian grated cheese (milk), black olives, white wine, truffle sauce, sunflower oil, potato starch, mushroom, garlic, parsley, truffle aroma, breadcrumbs (wheat flour, wheat starch), batter (water, wheat flour, wheat starch, sunflower oil, salt)", contributes:"Declares \"Contains\": <b>Gluten</b> (wheat), <b>Milk</b>.", may:"Label says \"could contain\": crustaceans, fish, molluscs, eggs, soya, mustard."},
+    {name:"Vegan Aioli Dip", ingredients:"Sunflower Oil, Soya Milk, Rapeseed Oil, White Wine Vinegar, Salt, Garlic, Lemon Juice (contains sulphites), White Pepper, Rice Flour", contributes:"Contributes: <b>Soya</b>, <b>Sulphites</b>."}
+  ]},
+{section:"Sharing is Caring", name:"Crispy Cauliflower Bites", sub:"yogurt, tahini sauce & pomegranate", price:"£9.90", status:"confirmed",
+  allergens:["GL","MI","SE"], trace:["SO","MU"],
+  components:[
+    {name:"Battered Cauliflower (Carisma)", ingredients:"Batter (Water, Wheat Flour, Sunflower Oil, Maize Flour, Salt, Maize Starch, Raising Agents, Yeast, Colour, Gum), Cauliflower (40%)", contributes:"Contributes: <b>Gluten</b> (wheat).", may:"May contain soya, mustard."},
+    {name:"Yogurt", ingredients:"British milk yogurt, gluten free", contributes:"Contributes: <b>Milk</b>."},
+    {name:"Tahini Sauce", ingredients:"Roasted & Ground Sesame Seeds (84%), Fibre, Demerara Sugar, Salt, Vanilla", contributes:"Contributes: <b>Sesame</b>.", may:"May contain traces of soya."}
+  ]},
+{section:"Sharing is Caring", name:"Chicken Goujons", sub:"with sweet chilli sauce", price:"£11.00", status:"confirmed",
+  allergens:["GL","SO","CE"], trace:["SE","PE","NU"],
+  components:[
+    {name:"Chicken Breast Strips (Meadow Vale)", ingredients:"Chicken Breast (63%), Wheat Flour, Water, Breadcrumbs (Wheat, Soya), Salt, Yeast, Vegetable Oil, Modified Tapioca Starch, Maize Starch, Wheat Gluten, Spice Extracts (Paprika, Pepper, Garlic, Spices containing Celery), Dextrose, Onion", contributes:"Contributes: <b>Gluten</b> (wheat), <b>Soya</b> (breadcrumbs), <b>Celery</b> (spice extract)."},
+    {name:"Sweet Chilli Dipping Sauce", ingredients:"Water, Sugar, Red Chillies, Ground Garlic, Modified Tapioca Starch, Acetic Acid, Salt", contributes:"No allergens.", may:"May contain sesame, peanuts, nuts."},
+    {name:"Garnish", ingredients:"Tomato, Rocket Leaves, Gherkins", contributes:"No allergens."}
+  ]},
+{section:"Sharing is Caring", name:"Greek Summer Salad", price:"£12.50", status:"confirmed",
+  allergens:["MI"], trace:[],
+  components:[
+    {name:"Vegetables", ingredients:"Pepper, Tomato, Onion, Cucumber", contributes:"No allergens."},
+    {name:"Kalamata Pitted Olives (Albion Fine Foods)", ingredients:"Olives, Water, Salt", contributes:"No allergens."},
+    {name:"Feta Cheese P.D.O. (Marathon Food)", ingredients:"Pasteurized Sheep's Milk, Pasteurized Goat's Milk, Salt, Rennet, Culture", contributes:"Contributes: <b>Milk</b>."}
+  ]},
+
+{section:"Bruschetta Selection", name:"Chilli Oil, Garlic, Pepper & Tomato", price:"£9.50", status:"confirmed",
+  allergens:["GL"], trace:[],
+  components:[
+    {name:"Topping", ingredients:"Chilli Oil (Extra Virgin Olive Oil, Natural Chilli Extract), Fresh Garlic, Black Pepper, Tomatoes", contributes:"No allergens."},
+    {name:"Ciabatta base", ingredients:"No formal label — treated as standard gluten sourdough per owner", contributes:"Contributes: <b>Gluten</b> (wheat)."}
+  ]},
+{section:"Bruschetta Selection", name:"Pesto & Sundried Tomatoes", price:"£10.00", status:"confirmed",
+  allergens:["MI","EG","NU","GL"], trace:["CE","FI"],
+  components:[
+    {name:"Pesto Genovese", ingredients:"Basil (51%), Sunflower Oil, Cheese (Milk) (Preservative Egg Lysozyme), Cashew Nuts, Extra Virgin Olive Oil, Potato Flakes, Pine Nuts, Garlic", contributes:"Contributes: <b>Milk</b>, <b>Eggs</b> (lysozyme), <b>Nuts</b> (cashew, pine).", may:"May also contain celery, fish, other nuts."},
+    {name:"Semi-Dried Tomatoes in Sunflower Oil", ingredients:"Italian Semi-Dried Tomatoes (57%), Sunflower Oil, Sea Salt, Garlic, Oregano", contributes:"No allergens."},
+    {name:"Ciabatta base", ingredients:"No formal label — treated as standard gluten sourdough per owner", contributes:"Contributes: <b>Gluten</b> (wheat)."}
+  ]},
+{section:"Bruschetta Selection", name:"Blue Cheese, Walnuts & Honey", price:"£10.00", status:"confirmed",
+  allergens:["MI","NU","GL"], trace:["PE","SE","MU","SO"],
+  components:[
+    {name:"Walnut Halves (Albion Fine Foods)", ingredients:"100% Walnuts", contributes:"Contributes: <b>Nuts</b>.", may:"May contain peanuts, sesame, mustard, soya, cereals containing gluten."},
+    {name:"Blossom Honey", ingredients:"100% Honey", contributes:"No allergens."},
+    {name:"Blue Cheese", ingredients:"Pasteurised Cow's Milk, Salt, Rennet, Starter Culture, Blue Mould. Label states \"Contains Milk\". Suitable for vegetarians.", contributes:"Contributes: <b>Milk</b>."},
+    {name:"Ciabatta base", ingredients:"No formal label — treated as standard gluten sourdough per owner", contributes:"Contributes: <b>Gluten</b> (wheat)."}
+  ]},
+{section:"Bruschetta Selection", name:"Mortadella & Pistachio Flatbread", sub:"with crumbled feta", price:"£12.50", status:"confirmed",
+  allergens:["GL","MI","NU"], trace:["LU","MU","SE","SO"],
+  components:[
+    {name:"Mortadella (Gran Bosco)", ingredients:"Pork Meat (95%), Potato Starch, Salt, Dextrose, Natural Flavours, Spices, Antioxidant E301, Preservative E250", contributes:"No allergens declared."},
+    {name:"Flatbread base (Authentic Greek Flatbread, Albion)", ingredients:"Wheat Flour, Water, Improvers, Sugar, Yeast, Salt, Sunflower Oil, Preservative, Enzymes", contributes:"Contributes: <b>Gluten</b> (wheat).", may:"May contain traces of milk, lupin, mustard, sesame, soya."},
+    {name:"Feta Cheese", ingredients:"Pasteurized Sheep's/Goat's Milk, Salt, Rennet, Culture", contributes:"Contributes: <b>Milk</b>."},
+    {name:"Pistachio", ingredients:"100% Pistachio", contributes:"Contributes: <b>Nuts</b> (pistachio)."}
+  ]},
+
+{section:"Platters Selection", name:"Cheese Platter", sub:"Pecorino, Manchego, Comté, Brillat-Savarin, figs, grapes, honey & breadbasket", price:"£24.50", status:"confirmed",
+  allergens:["MI","GL"], trace:[],
+  components:[
+    {name:"Figs, Grapes, Honey", ingredients:"", contributes:"No allergens."},
+    {name:"Pecorino", ingredients:"Sheep Milk, Lactic Ferment, Rennet, Salt. Label states \"Contains Milk\".", contributes:"Contributes: <b>Milk</b>."},
+    {name:"Manchego", ingredients:"Spanish sheep's milk cheese (firm, nutty, buttery) — no formal label, but sheep's milk cheese by definition", contributes:"Contributes: <b>Milk</b>."},
+    {name:"Comté", ingredients:"Unpasteurised Cows Milk, Salt, Rennet, Starter. Label states \"Contains Milk\".", contributes:"Contributes: <b>Milk</b>."},
+    {name:"Brillat-Savarin", ingredients:"Pasteurised Cows Milk, Salt, Lactic Culture, Animal Rennet, Calcium Chloride (E509). Label states \"Contains Milk\".", contributes:"Contributes: <b>Milk</b>."},
+    {name:"Breadbasket", ingredients:"No formal label — treated as standard gluten sourdough per owner", contributes:"Contributes: <b>Gluten</b> (wheat)."}
+  ]},
+{section:"Platters Selection", name:"Charcuterie Platter", sub:"Salami, Coppa, Chorizo, Mortadella, Prosciutto, Bresaola, gherkins, tomato, chutney & breadbasket", price:"£24.50", status:"draft",
+  allergens:["GL","SU"], trace:[],
+  note:"Prosciutto & Bresaola labels still outstanding — ask staff to confirm before ordering.",
+  components:[
+    {name:"Milano Raw Salami", ingredients:"Pork meat, Salt, Dextrose, Sucrose, Aromas, Spices, Antioxidant, Preservatives", contributes:"No allergens."},
+    {name:"Matured Sweet Coppa", ingredients:"Pork meat, Salt, Dextrose, Spices, Natural Aromas, Antioxidant, Preservatives", contributes:"No allergens."},
+    {name:"Chorizo (Pont, gluten-free certified)", ingredients:"Lean Pork, Bacon, Dextrin, Pork Protein, Salt, Spices, Maltodextrin, Garlic, Stabilizers, Preservatives", contributes:"No allergens."},
+    {name:"Mortadella (Gran Bosco)", ingredients:"Pork Meat, Potato Starch, Salt, Dextrose, Natural Flavours, Spices", contributes:"No allergens declared."},
+    {name:"Prosciutto", ingredients:"Label not yet provided.", contributes:"<span class=\"flag\">Awaiting confirmation</span>"},
+    {name:"Bresaola", ingredients:"Label not yet provided.", contributes:"<span class=\"flag\">Awaiting confirmation</span>"},
+    {name:"Gherkins, Tomato", ingredients:"", contributes:"No allergens."},
+    {name:"Chutney (Cottage Delight — Balsamic Red Onion Marmalade)", ingredients:"Red Onion (54%), Demerara Sugar, Balsamic Vinegar (wine vinegar, grape must, colour: sulphite ammonia caramel, preservative: sulphur dioxide), White Wine Vinegar, Muscovado Sugar, Corn Flour. Gluten free.", contributes:"Contributes: <b>Sulphites</b>."},
+    {name:"Breadbasket", ingredients:"No formal label — treated as standard gluten sourdough per owner", contributes:"Contributes: <b>Gluten</b> (wheat)."}
+  ]},
+{section:"Platters Selection", name:"Small Platter", sub:"3 cheeses & 3 meats, same garnish & breadbasket", price:"£34.50", status:"draft",
+  allergens:["MI","GL","SU"], trace:[],
+  note:"Draws from the same cheeses/meats above. Since the exact 3-of-4 can vary, treat this as if all listed allergens could be present unless staff confirm the exact selection on your plate.",
+  components:[]},
+{section:"Platters Selection", name:"Large Platter", sub:"4 cheeses & 4 meats, same garnish & breadbasket", price:"£45.50", status:"draft",
+  allergens:["MI","GL","SU"], trace:[],
+  note:"Combined allergens of the Cheese Platter + Charcuterie Platter above — awaiting Prosciutto & Bresaola confirmation.",
+  components:[]}
+];
+
+const SECTIONS = ["Snack","Sharing is Caring","Bruschetta Selection","Platters Selection"];
+
+function chip(code, kind){
+  const cls = kind === "solid" ? "chip-solid" : "chip-trace";
+  return `<span class="chip ${cls}">${ALLERGENS[code]}</span>`;
+}
+
+function renderComponent(c){
+  return `<div class="component">
+    <div class="component-name">${c.name}</div>
+    ${c.ingredients ? `<p class="ingredients">${c.ingredients}</p>` : ""}
+    <p class="contributes">${c.contributes}</p>
+    ${c.may ? `<p class="may-contain">Label also warns: ${c.may}</p>` : ""}
+  </div>`;
+}
+
+function renderDish(d){
+  const chips = d.allergens.length
+    ? d.allergens.map(a=>chip(a,"solid")).join("")
+    : `<span class="chip chip-none">No allergens</span>`;
+  const traceChips = d.trace.map(a=>chip(a,"trace")).join("");
+  const statusLabel = d.status === "confirmed" ? "Confirmed" : "Draft";
+  const statusClass = d.status === "confirmed" ? "status-confirmed" : "status-draft";
+  const body = d.components.length
+    ? d.components.map(renderComponent).join("")
+    : (d.note ? "" : "<p class=\"ingredients\">No component detail on file.</p>");
+  const noteHtml = d.note ? `<p class="may-contain" style="margin-top:0.4rem;">${d.note}</p>` : "";
+
+  return `<details class="card" data-name="${d.name.toLowerCase()}" data-allergens="${d.allergens.join(',')}" data-trace="${d.trace.join(',')}">
+    <summary>
+      <span class="item-name">${d.name}${d.sub ? `<span class="sub">${d.sub}</span>` : ""}</span>
+      <span class="price">${d.price}</span>
+      <span class="chips">${chips}${traceChips}</span>
+      <span class="status-pill ${statusClass}">${statusLabel}</span>
+    </summary>
+    <div class="item-body">${body}${noteHtml}</div>
+  </details>`;
+}
+
+const menuEl = document.getElementById("menu");
+function renderMenu(){
+  menuEl.innerHTML = SECTIONS.map(sec => {
+    const items = DISHES.filter(d=>d.section===sec).map(renderDish).join("");
+    return `<div class="section-block" data-section="${sec}">
+      <div class="section-title">${sec}</div>
+      ${items}
+    </div>`;
+  }).join("");
+}
+renderMenu();
+
+// --- Allergen filter chips ---
+const filterRow = document.getElementById("allergenFilters");
+let selectedAllergens = new Set();
+Object.entries(ALLERGENS).forEach(([code,name])=>{
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "chip-filter";
+  btn.textContent = name;
+  btn.dataset.code = code;
+  btn.addEventListener("click", ()=>{
+    if(selectedAllergens.has(code)){ selectedAllergens.delete(code); btn.classList.remove("selected"); }
+    else { selectedAllergens.add(code); btn.classList.add("selected"); }
+    applyFilters();
+  });
+  filterRow.appendChild(btn);
+});
+
+// --- Mode toggle ---
+let mode = "hide";
+const modeHideBtn = document.getElementById("modeHide");
+const modeShowBtn = document.getElementById("modeShow");
+modeHideBtn.addEventListener("click", ()=>{ mode="hide"; modeHideBtn.classList.add("active"); modeShowBtn.classList.remove("active"); applyFilters(); });
+modeShowBtn.addEventListener("click", ()=>{ mode="show"; modeShowBtn.classList.add("active"); modeHideBtn.classList.remove("active"); applyFilters(); });
+
+const includeTrace = document.getElementById("includeTrace");
+includeTrace.addEventListener("change", applyFilters);
+
+const searchInput = document.getElementById("search");
+searchInput.addEventListener("input", applyFilters);
+
+const resultsCount = document.getElementById("resultsCount");
+
+function applyFilters(){
+  const term = searchInput.value.trim().toLowerCase();
+  const cards = Array.from(document.querySelectorAll(".card"));
+  let visibleCount = 0;
+
+  cards.forEach(card=>{
+    const name = card.dataset.name;
+    const allergenSet = card.dataset.allergens.split(',').filter(Boolean);
+    const traceSet = card.dataset.trace.split(',').filter(Boolean);
+    const fullSet = includeTrace.checked ? allergenSet.concat(traceSet) : allergenSet;
+
+    const nameMatch = term === "" || name.includes(term);
+
+    let allergenMatch = true;
+    if(selectedAllergens.size > 0){
+      const hasAny = [...selectedAllergens].some(a=>fullSet.includes(a));
+      allergenMatch = mode === "hide" ? !hasAny : hasAny;
+    }
+
+    const visible = nameMatch && allergenMatch;
+    card.style.display = visible ? "" : "none";
+    if(visible) visibleCount++;
+  });
+
+  document.querySelectorAll(".section-block").forEach(block=>{
+    const anyVisible = Array.from(block.querySelectorAll(".card")).some(c=>c.style.display !== "none");
+    block.style.display = anyVisible ? "" : "none";
+  });
+
+  resultsCount.textContent = visibleCount === 0
+    ? "No dishes match — try clearing a filter."
+    : `Showing ${visibleCount} of ${cards.length} dishes`;
+}
+applyFilters();
+</script>
+</body>
+</html>
