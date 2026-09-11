@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traders Allergen Matrix</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Karla:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#F0EFE6;
+  --paper-raised:#F8F7F1;
+  --ink:#1E2420;
+  --ink-soft:#54594F;
+  --line:#D9D6C8;
+  --wine:#7A2036;
+  --wine-soft:#F2E4E4;
+  --confirmed:#3F6B4B;
+  --confirmed-soft:#E4EDE4;
+  --draft:#B6791C;
+  --draft-soft:#F5E9D4;
+  --pending:#8B4A46;
+  --pending-soft:#F1E1DE;
+  --chip-solid-bg:#26312A;
+  --chip-solid-fg:#F8F7F1;
+  --chip-trace-bg:#E7E4D6;
+  --chip-trace-fg:#6B7063;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#1B211D;
+    --paper-raised:#232922;
+    --ink:#EDEAE0;
+    --ink-soft:#AFB3A6;
+    --line:#3B4239;
+    --wine:#E39FB0;
+    --wine-soft:#3A2429;
+    --confirmed:#8FC49B;
+    --confirmed-soft:#243429;
+    --draft:#E0AA5C;
+    --draft-soft:#3A2E19;
+    --pending:#E0958E;
+    --pending-soft:#3A2422;
+    --chip-solid-bg:#DDE4D8;
+    --chip-solid-fg:#1B211D;
+    --chip-trace-bg:#2E352C;
+    --chip-trace-fg:#A7AC9C;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1B211D;
+  --paper-raised:#232922;
+  --ink:#EDEAE0;
+  --ink-soft:#AFB3A6;
+  --line:#3B4239;
+  --wine:#E39FB0;
+  --wine-soft:#3A2429;
+  --confirmed:#8FC49B;
+  --confirmed-soft:#243429;
+  --draft:#E0AA5C;
+  --draft-soft:#3A2E19;
+  --pending:#E0958E;
+  --pending-soft:#3A2422;
+  --chip-solid-bg:#DDE4D8;
+  --chip-solid-fg:#1B211D;
+  --chip-trace-bg:#2E352C;
+  --chip-trace-fg:#A7AC9C;
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:'Karla',system-ui,sans-serif;
+  padding:2.5rem clamp(1rem,4vw,3rem) 4rem;
+}
+.wrap{max-width:920px;margin:0 auto;}
+
+header{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:1.5rem;
+  border-bottom:2px solid var(--ink);
+  padding-bottom:1.5rem;
+  margin-bottom:1.75rem;
+}
+.eyebrow{
+  font-size:0.72rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--wine);
+  font-weight:700;
+  margin:0 0 0.4rem;
+}
+h1{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:clamp(2.1rem,4.5vw,3rem);
+  margin:0;
+  line-height:1;
+  text-wrap:balance;
+}
+h1 em{font-style:italic;font-weight:500;color:var(--wine);}
+.meta{
+  text-align:right;
+  font-size:0.85rem;
+  color:var(--ink-soft);
+  line-height:1.5;
+}
+.meta strong{color:var(--ink);}
+
+.banner{
+  background:var(--pending-soft);
+  border:1px solid var(--pending);
+  border-radius:3px;
+  padding:0.85rem 1.1rem;
+  font-size:0.88rem;
+  color:var(--ink);
+  margin-bottom:1.75rem;
+  display:flex;
+  gap:0.6rem;
+  align-items:flex-start;
+}
+.banner b{color:var(--pending);white-space:nowrap;}
+
+.key{
+  display:flex;
+  flex-wrap:wrap;
+  gap:0.6rem 1.4rem;
+  padding:0.9rem 1.1rem;
+  background:var(--paper-raised);
+  border:1px solid var(--line);
+  border-radius:4px;
+  margin-bottom:2.4rem;
+  font-size:0.8rem;
+  color:var(--ink-soft);
+  align-items:center;
+}
+.key-item{display:flex;align-items:center;gap:0.5rem;white-space:nowrap;}
+
+.status-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:0.35rem;
+  font-size:0.66rem;
+  font-weight:700;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  padding:0.2rem 0.55rem;
+  border-radius:99px;
+  flex-shrink:0;
+}
+.status-confirmed{background:var(--confirmed-soft);color:var(--confirmed);}
+.status-draft{background:var(--draft-soft);color:var(--draft);}
+.status-pending{background:var(--pending-soft);color:var(--pending);}
+
+.section-title{
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-size:1.4rem;
+  font-weight:500;
+  color:var(--wine);
+  margin:2.6rem 0 0.9rem;
+  padding-bottom:0.4rem;
+  border-bottom:1px solid var(--line);
+}
+.section-title:first-of-type{margin-top:0;}
+.section-note{
+  font-family:'Karla',sans-serif;
+  font-style:normal;
+  font-size:0.72rem;
+  color:var(--ink-soft);
+  font-weight:600;
+  text-transform:none;
+  display:block;
+  margin-top:0.15rem;
+}
+
+details.item{
+  background:var(--paper-raised);
+  border:1px solid var(--line);
+  border-radius:6px;
+  margin-bottom:0.65rem;
+  overflow:hidden;
+}
+details.item[open]{border-color:var(--ink-soft);}
+details.item summary{
+  list-style:none;
+  cursor:pointer;
+  padding:0.85rem 1.1rem;
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:0.6rem 0.7rem;
+}
+details.item summary::-webkit-details-marker{display:none;}
+details.item summary::before{
+  content:"+";
+  font-family:'Karla',sans-serif;
+  font-weight:700;
+  font-size:1rem;
+  color:var(--ink-soft);
+  width:1.1rem;
+  text-align:center;
+  flex-shrink:0;
+}
+details.item[open] summary::before{content:"–";}
+
+.item-name{
+  font-weight:700;
+  font-size:0.95rem;
+  color:var(--ink);
+  flex-shrink:0;
+}
+.item-name .sub{
+  display:block;
+  font-weight:400;
+  font-size:0.76rem;
+  color:var(--ink-soft);
+  margin-top:0.1rem;
+}
+.chips{display:flex;flex-wrap:wrap;gap:0.35rem;margin-left:auto;align-items:center;}
+.chip{
+  font-size:0.72rem;
+  font-weight:700;
+  padding:0.22rem 0.6rem;
+  border-radius:99px;
+  white-space:nowrap;
+}
+.chip-solid{background:var(--chip-solid-bg);color:var(--chip-solid-fg);}
+.chip-provisional{background:transparent;color:var(--draft);border:1.5px dashed var(--draft);}
+.chip-trace{background:var(--chip-trace-bg);color:var(--chip-trace-fg);font-weight:600;}
+.chip-none{background:transparent;color:var(--confirmed);border:1.5px solid var(--confirmed);}
+
+.item-body{
+  padding:0 1.1rem 1.1rem 2.6rem;
+  border-top:1px solid var(--line);
+  margin-top:-1px;
+}
+.component{padding:0.7rem 0;border-bottom:1px dashed var(--line);}
+.component:last-child{border-bottom:none;}
+.component-name{font-weight:700;font-size:0.82rem;color:var(--ink);margin-bottom:0.25rem;}
+.component-name .flag{font-weight:600;color:var(--pending);font-size:0.72rem;}
+.ingredients{
+  font-size:0.82rem;
+  color:var(--ink-soft);
+  line-height:1.5;
+  margin:0 0 0.4rem;
+}
+.contributes{font-size:0.78rem;color:var(--ink);}
+.contributes b{color:var(--wine);}
+.may-contain{font-size:0.76rem;color:var(--ink-soft);font-style:italic;}
+
+footer{
+  margin-top:2.5rem;
+  padding-top:1.2rem;
+  border-top:1px solid var(--line);
+  font-size:0.78rem;
+  color:var(--ink-soft);
+  line-height:1.6;
+}
+footer .todo{color:var(--pending);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <div>
+    <p class="eyebrow">Traders Wine Bar — Kitchen Working Copy</p>
+    <h1>Allergen <em>Matrix</em></h1>
+  </div>
+  <div class="meta">
+    Built straight from Albion &amp; packaging labels<br>
+    <strong>Click any dish to see its ingredients</strong><br>
+    Not yet approved for customer display
+  </div>
+</header>
+
+<div class="banner">
+  <b>Draft —</b>
+  <span>Every allergen tag below is sourced from an actual ingredient label. Click a dish to see exactly which component and which ingredient it came from. Dashed tags mean the ingredient hasn't been photographed yet and is an assumption — don't rely on those until confirmed.</span>
+</div>
+
+<div class="key">
+  <span class="key-item"><span class="chip chip-solid">Milk</span> confirmed, from a label</span>
+  <span class="key-item"><span class="chip chip-provisional">Milk</span> provisional — assumed, not yet confirmed</span>
+  <span class="key-item"><span class="chip chip-trace">soya</span> "may contain" / cross-contamination only</span>
+  <span class="key-item"><span class="chip chip-none">No allergens</span></span>
+</div>
+
+<div class="section-title">Snack</div>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Nocellara Green Olives</span>
+    <span class="chips"><span class="chip chip-none">No allergens</span></span>
+    <span class="status-pill status-confirmed">Confirmed</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Whole product</div>
+      <p class="ingredients">Olives, Water, Salt, Citric Acid (E330)</p>
+      <p class="contributes">No allergens present.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Roasted Cashews</span>
+    <span class="chips"><span class="chip chip-solid">Nuts</span></span>
+    <span class="status-pill status-confirmed">Confirmed</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Whole product — Albion Fine Foods</div>
+      <p class="ingredients">Cashew Nuts, Rapeseed Oil, Salt</p>
+      <p class="contributes">Contributes: <b>Nuts</b> (cashew).</p>
+      <p class="may-contain">Label also warns: packed on premises handling peanuts, sesame, mustard, soya, cereals containing gluten.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Roasted Almonds</span>
+    <span class="chips"><span class="chip chip-solid">Nuts</span></span>
+    <span class="status-pill status-confirmed">Confirmed</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Whole product — Albion Fine Foods</div>
+      <p class="ingredients">Almonds, Vegetable Oil, Salt</p>
+      <p class="contributes">Contributes: <b>Nuts</b> (almond).</p>
+      <p class="may-contain">Label also warns: packed on premises handling peanuts, sesame, mustard, cereals containing gluten.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Roasted Pecans<span class="sub">honey-glazed</span></span>
+    <span class="chips"><span class="chip chip-solid">Nuts</span></span>
+    <span class="status-pill status-confirmed">Confirmed</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Whole product — Albion Fine Foods</div>
+      <p class="ingredients">Pecan Nuts (56%), Sugar, Honey (3%)</p>
+      <p class="contributes">Contributes: <b>Nuts</b> (pecan).</p>
+      <p class="may-contain">Label also warns: packed on premises handling peanuts, mustard, sesame, soya, cereals containing gluten.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Wasabi Nuts<span class="sub">wasabi peanuts</span></span>
+    <span class="chips"><span class="chip chip-solid">Peanuts</span><span class="chip chip-solid">Gluten</span><span class="chip chip-solid">Soya</span><span class="chip chip-solid">Mustard</span></span>
+    <span class="status-pill status-confirmed">Confirmed</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Whole product — Albion Fine Foods</div>
+      <p class="ingredients">Peanuts, Wheat Flour, Sugar, Corn Starch, Corn Flour, Palm Oil, Soy Sauce Powder (wheat, soybean, dextrin, water, salt, koji, colouring E150c), Seasoning (dextrin, thickener E414, mustard flavour, palm oil, antioxidant E392), Raising Agent E500, Potato Starch, Flavour Enhancer E635</p>
+      <p class="contributes">Contributes: <b>Peanuts</b> (main ingredient), <b>Gluten</b> (wheat flour, soy sauce powder), <b>Soya</b> (soy sauce powder), <b>Mustard</b> (seasoning).</p>
+      <p class="may-contain">Label also warns: may contain nuts, sesame.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Sourdough Bread, Olive Oil &amp; Balsamic Vinegar</span>
+    <span class="chips"><span class="chip chip-solid">Sulphites</span><span class="chip chip-provisional">Gluten</span></span>
+    <span class="status-pill status-draft">Draft — bread &amp; oil labels missing</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Balsamic Vinegar <span class="flag">confirmed</span></div>
+      <p class="ingredients">Cooked grape must, Wine vinegar, Colouring (E150d)</p>
+      <p class="contributes">Contributes: <b>Sulphur Dioxide/Sulphites</b>.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Sourdough Bread <span class="flag">no label photographed yet</span></div>
+      <p class="ingredients">Not yet confirmed. Sourdough is typically wheat flour, water, salt, natural leaven — assumed to contain gluten, but the actual bread used has not been checked.</p>
+      <p class="contributes">Provisional: <b>Gluten</b> — send this label to confirm.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Olive Oil (plain, for dipping) <span class="flag">no label photographed yet</span></div>
+      <p class="ingredients">Not yet confirmed.</p>
+    </div>
+  </div>
+</details>
+
+<div class="section-title">Sharing is Caring</div>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Truffle Oil &amp; Parmesan Fries</span>
+    <span class="chips"><span class="chip chip-solid">Milk</span></span>
+    <span class="status-pill status-confirmed">Confirmed</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Fries</div>
+      <p class="ingredients">Potatoes (87%), Coating (modified potato starch, rice flour, potato starch, salt, raising agents, vegetable oils, turmeric), Dextrose, Spice extract</p>
+      <p class="contributes">No allergens (gluten-free coating).</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Truffle Oil</div>
+      <p class="ingredients">Extra Virgin Olive Oil, White Truffle flavour</p>
+      <p class="contributes">No allergens.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Parmesan</div>
+      <p class="ingredients">Milk, Salt, Rennet</p>
+      <p class="contributes">Contributes: <b>Milk</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Halloumi Fries<span class="sub">with sweet chilli sauce</span></span>
+    <span class="chips"><span class="chip chip-solid">Milk</span><span class="chip chip-solid">Gluten</span></span>
+    <span class="status-pill status-confirmed">Confirmed</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Halloumi Fries (Frostkrone)</div>
+      <p class="ingredients">Halloumi Cheese 41% (Cow's, Goat's, Sheep's Milk), Wheat Flour, Water, Rapeseed Oil, Rice Flour, Wheat Starch, Potato Starch, Salt, Raising Agents, Emulsifier, Yeast, Flour Treatment Agent</p>
+      <p class="contributes">Contributes: <b>Milk</b>, <b>Gluten</b> (wheat).</p>
+      <p class="may-contain">Label also warns: may also contain egg, soya.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Sweet Chilli Dipping Sauce</div>
+      <p class="ingredients">Water, Sugar, Red Chillies, Ground Garlic, Modified Tapioca Starch, Acetic Acid, Salt</p>
+      <p class="contributes">No allergens.</p>
+      <p class="may-contain">Label warns: may contain sesame, peanuts, nuts.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Truffle Arancini &amp; Dip</span>
+    <span class="chips"><span class="chip chip-solid">Gluten</span><span class="chip chip-solid">Milk</span><span class="chip chip-solid">Soya</span><span class="chip chip-solid">Sulphites</span></span>
+    <span class="status-pill status-confirmed">Confirmed</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Arancini (Carisma)</div>
+      <p class="ingredients">Cooked rice, Italian grated cheese (milk), black olives, white wine, truffle sauce, sunflower oil, potato starch, cultivated mushroom, garlic, parsley, truffle aroma, breadcrumbs (wheat flour, wheat starch), dye E153, batter (water, wheat flour, wheat starch, sunflower oil, salt)</p>
+      <p class="contributes">Label declares "Contains": <b>Gluten</b> (wheat), <b>Milk</b>.</p>
+      <p class="may-contain">Label also says "could contain": crustaceans, fish, molluscs, eggs, soya, mustard.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Vegan Aioli Dip</div>
+      <p class="ingredients">Sunflower Oil, Soya Milk, Rapeseed Oil, White Wine Vinegar, Salt, Garlic, Lemon Juice (contains sulphites), White Pepper, Rice Flour</p>
+      <p class="contributes">Contributes: <b>Soya</b>, <b>Sulphur Dioxide/Sulphites</b>.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Crispy Cauliflower Bites<span class="sub">yogurt, tahini sauce &amp; pomegranate</span></span>
+    <span class="chips"><span class="chip chip-solid">Gluten</span><span class="chip chip-solid">Milk</span><span class="chip chip-solid">Sesame</span></span>
+    <span class="status-pill status-confirmed">Confirmed</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Battered Cauliflower (Carisma)</div>
+      <p class="ingredients">Batter (Water, Wheat Flour, Sunflower Oil, Maize Flour, Salt, Maize Starch, Raising Agents, Yeast, Colour, Gum), Cauliflower (40%)</p>
+      <p class="contributes">Contributes: <b>Gluten</b> (wheat).</p>
+      <p class="may-contain">Label warns: may contain soya, mustard.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Yogurt</div>
+      <p class="ingredients">British milk yogurt, gluten free, no artificial additives</p>
+      <p class="contributes">Contributes: <b>Milk</b>.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Tahini Sauce</div>
+      <p class="ingredients">Roasted &amp; Ground Sesame Seeds (84%), Fibre, Demerara Sugar, Salt, Vanilla</p>
+      <p class="contributes">Contributes: <b>Sesame</b>.</p>
+      <p class="may-contain">Label warns: may contain traces of soya.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Chilli Infused Honey (drizzle) <span class="flag">confirm if used here</span></div>
+      <p class="ingredients">Honey, Roquito Chilli Extract</p>
+      <p class="contributes">No allergens — but double-check this is actually the honey used on this dish; the menu describes pomegranate, not chilli honey.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Chicken Goujons<span class="sub">with sweet chilli sauce</span></span>
+    <span class="chips"><span class="chip chip-solid">Gluten</span><span class="chip chip-solid">Soya</span><span class="chip chip-solid">Celery</span></span>
+    <span class="status-pill status-confirmed">Confirmed</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Chicken Breast Strips (Meadow Vale)</div>
+      <p class="ingredients">Chicken Breast (63%), Wheat Flour, Water, Breadcrumbs (Wheat, Soya), Salt, Yeast, Vegetable Oil, Modified Tapioca Starch, Maize Starch, Wheat Gluten, Raising Agents, Stabilisers, Spice Extracts (Paprika, Pepper, Garlic, Spices containing Celery), Dextrose, Onion</p>
+      <p class="contributes">Contributes: <b>Gluten</b> (wheat), <b>Soya</b> (breadcrumbs), <b>Celery</b> (spice extract).</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Sweet Chilli Dipping Sauce</div>
+      <p class="ingredients">Water, Sugar, Red Chillies, Ground Garlic, Modified Tapioca Starch, Acetic Acid, Salt</p>
+      <p class="contributes">No allergens.</p>
+      <p class="may-contain">Label warns: may contain sesame, peanuts, nuts.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Garnish</div>
+      <p class="ingredients">Tomato, Rocket Leaves, Gherkins</p>
+      <p class="contributes">No allergens.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Greek Summer Salad</span>
+    <span class="chips"><span class="chip chip-solid">Milk</span></span>
+    <span class="status-pill status-confirmed">Confirmed</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Vegetables</div>
+      <p class="ingredients">Pepper, Tomato, Onion, Cucumber</p>
+      <p class="contributes">No allergens.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Kalamata Pitted Olives (Albion Fine Foods)</div>
+      <p class="ingredients">Olives, Water, Salt</p>
+      <p class="contributes">No allergens.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Feta Cheese P.D.O. (Marathon Food)</div>
+      <p class="ingredients">Pasteurized Sheep's Milk, Pasteurized Goat's Milk, Salt, Rennet, Culture (includes Lactose)</p>
+      <p class="contributes">Contributes: <b>Milk</b>.</p>
+    </div>
+  </div>
+</details>
+
+<div class="section-title">Bruschetta Selection<span class="section-note">Ciabatta base label still needed — applies to the first three below</span></div>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Chilli Oil, Garlic, Pepper &amp; Tomato</span>
+    <span class="chips"><span class="chip chip-provisional">Gluten</span></span>
+    <span class="status-pill status-draft">Draft — bread label missing</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Topping <span class="flag">confirmed</span></div>
+      <p class="ingredients">Chilli Oil (Extra Virgin Olive Oil, Natural Chilli Extract), Fresh Garlic, Black Pepper, Tomatoes</p>
+      <p class="contributes">No allergens.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Ciabatta base <span class="flag">no label photographed yet</span></div>
+      <p class="ingredients">Not yet confirmed — standard ciabatta is wheat-based.</p>
+      <p class="contributes">Provisional: <b>Gluten</b> — send the bread packaging to confirm.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Pesto &amp; Sundried Tomatoes</span>
+    <span class="chips"><span class="chip chip-solid">Milk</span><span class="chip chip-solid">Eggs</span><span class="chip chip-solid">Nuts</span><span class="chip chip-provisional">Gluten</span></span>
+    <span class="status-pill status-draft">Draft — bread label missing</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Pesto Genovese <span class="flag">confirmed</span></div>
+      <p class="ingredients">Basil (51%), Sunflower Oil, Cheese (Milk) (Preservative Egg Lysozyme), Cashew Nuts, Extra Virgin Olive Oil, Potato Flakes, Salt, Sugar, Yeast Extract, Pine Nuts, Garlic, Acidity Regulator, Antioxidant</p>
+      <p class="contributes">Contributes: <b>Milk</b>, <b>Eggs</b> (lysozyme), <b>Nuts</b> (cashew, pine).</p>
+      <p class="may-contain">Label warns: may also contain celery, fish, other nuts.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Semi-Dried Tomatoes in Sunflower Oil <span class="flag">confirmed</span></div>
+      <p class="ingredients">Italian Semi-Dried Tomatoes (57%), Sunflower Oil, Sea Salt, Garlic, Oregano, Acidity Regulator</p>
+      <p class="contributes">No allergens.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Ciabatta base <span class="flag">no label photographed yet</span></div>
+      <p class="ingredients">Not yet confirmed — standard ciabatta is wheat-based.</p>
+      <p class="contributes">Provisional: <b>Gluten</b> — send the bread packaging to confirm.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Blue Cheese, Walnuts &amp; Honey</span>
+    <span class="chips"><span class="chip chip-solid">Nuts</span><span class="chip chip-provisional">Milk</span><span class="chip chip-provisional">Gluten</span></span>
+    <span class="status-pill status-draft">Draft — blue cheese &amp; bread labels missing</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Walnut Halves (Albion Fine Foods) <span class="flag">confirmed</span></div>
+      <p class="ingredients">100% Walnuts</p>
+      <p class="contributes">Contributes: <b>Nuts</b>.</p>
+      <p class="may-contain">Label warns: may contain peanuts, sesame, mustard, soya, cereals containing gluten.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Blossom Honey <span class="flag">confirmed</span></div>
+      <p class="ingredients">100% Honey</p>
+      <p class="contributes">No allergens.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Blue Cheese <span class="flag">no label photographed yet</span></div>
+      <p class="ingredients">Not yet confirmed. Blue cheese is almost always cow's milk.</p>
+      <p class="contributes">Provisional: <b>Milk</b> — send the actual label to confirm (and rule out anything unexpected).</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Ciabatta base <span class="flag">no label photographed yet</span></div>
+      <p class="ingredients">Not yet confirmed — standard ciabatta is wheat-based.</p>
+      <p class="contributes">Provisional: <b>Gluten</b> — send the bread packaging to confirm.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Mortadella &amp; Pistachio Flatbread<span class="sub">with crumbled feta</span></span>
+    <span class="chips"><span class="chip chip-solid">Gluten</span><span class="chip chip-solid">Milk</span><span class="chip chip-provisional">Nuts</span></span>
+    <span class="status-pill status-draft">Draft — pistachio label missing</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Mortadella (Gran Bosco) <span class="flag">confirmed</span></div>
+      <p class="ingredients">Pork Meat (95%), Potato Starch, Salt, Dextrose, Natural Flavours, Spices, Antioxidant E301, Preservative E250</p>
+      <p class="contributes">No allergens declared.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Flatbread base (Authentic Greek Flatbread, Albion) <span class="flag">confirmed</span></div>
+      <p class="ingredients">Wheat Flour, Water, Improvers (Ascorbic Acid, L-Cysteine), Sugar, Yeast, Salt, Sunflower Oil, Preservative (Sorbic Acid), Enzymes</p>
+      <p class="contributes">Contributes: <b>Gluten</b> (wheat).</p>
+      <p class="may-contain">Label warns: may contain traces of milk, lupin, mustard, sesame, soya.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Feta Cheese <span class="flag">confirmed — same product as Greek Salad</span></div>
+      <p class="ingredients">Pasteurized Sheep's Milk, Pasteurized Goat's Milk, Salt, Rennet, Culture</p>
+      <p class="contributes">Contributes: <b>Milk</b>.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Pistachio <span class="flag">no label photographed yet</span></div>
+      <p class="ingredients">Not yet confirmed.</p>
+      <p class="contributes">Provisional: <b>Nuts</b> — pistachio is a tree nut; send the label to confirm nothing else is added.</p>
+    </div>
+  </div>
+</details>
+
+<div class="section-title">Platters Selection</div>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Cheese Platter<span class="sub">Pecorino, Manchego, Comté, Brillat-Savarin, figs, grapes, honey</span></span>
+    <span class="chips"><span class="chip chip-provisional">Milk</span></span>
+    <span class="status-pill status-pending">Pending — 4 cheese labels missing</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Figs, Grapes, Honey <span class="flag">confirmed</span></div>
+      <p class="contributes">No allergens.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Pecorino <span class="flag">no label photographed yet</span></div>
+      <p class="contributes">Provisional: <b>Milk</b> (sheep) — send the label to confirm.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Manchego <span class="flag">no label photographed yet</span></div>
+      <p class="contributes">Provisional: <b>Milk</b> (sheep) — send the label to confirm.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Comté <span class="flag">no label photographed yet</span></div>
+      <p class="contributes">Provisional: <b>Milk</b> (cow) — send the label to confirm.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Brillat-Savarin <span class="flag">no label photographed yet</span></div>
+      <p class="contributes">Provisional: <b>Milk</b> (cow) — send the label to confirm.</p>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Charcuterie Platter<span class="sub">Salami, Coppa, Chorizo, Mortadella, Prosciutto, Bresaola, gherkins, tomato, chutney</span></span>
+    <span class="chips"><span class="chip chip-none">Nothing confirmed yet</span></span>
+    <span class="status-pill status-pending">Pending — 2 meats &amp; chutney missing</span>
+  </summary>
+  <div class="item-body">
+    <div class="component">
+      <div class="component-name">Milano Raw Salami <span class="flag">confirmed</span></div>
+      <p class="ingredients">Pork meat, Salt, Dextrose, Sucrose, Aromas, Spices, Antioxidant E301, Preservatives E252/E250</p>
+      <p class="contributes">No allergens.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Matured Sweet Coppa <span class="flag">confirmed</span></div>
+      <p class="ingredients">Pork meat, Salt, Dextrose, Spices, Natural Aromas, Antioxidant E301, Preservatives E250/E251</p>
+      <p class="contributes">No allergens.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Chorizo (Pont, gluten-free certified) <span class="flag">confirmed</span></div>
+      <p class="ingredients">Lean Pork, Bacon, Dextrin, Pork Protein, Salt, Spices, Maltodextrin, Garlic, Stabilizers, Preservatives, Antioxidant, Dextrose, Aroma, Plant Extracts</p>
+      <p class="contributes">No allergens.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Mortadella (Gran Bosco) <span class="flag">confirmed — same product as bruschetta</span></div>
+      <p class="contributes">No allergens declared.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Prosciutto <span class="flag">no label photographed yet</span></div>
+    </div>
+    <div class="component">
+      <div class="component-name">Bresaola <span class="flag">no label photographed yet</span></div>
+    </div>
+    <div class="component">
+      <div class="component-name">Gherkins, Tomato <span class="flag">confirmed</span></div>
+      <p class="contributes">No allergens.</p>
+    </div>
+    <div class="component">
+      <div class="component-name">Chutney <span class="flag">to be sent</span></div>
+    </div>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Small Platter<span class="sub">3 cheeses &amp; 3 meats, same garnish as above</span></span>
+    <span class="chips"></span>
+    <span class="status-pill status-pending">Pending</span>
+  </summary>
+  <div class="item-body">
+    <p class="ingredients">Draws from the same cheeses and meats as the Cheese and Charcuterie Platters above — no new ingredients. Since the exact 3-of-4 selection can vary by order, the safest customer-facing figure is the combined allergen list of all 4 cheeses + all 4 meats, unless staff confirm the exact items on a given plate.</p>
+  </div>
+</details>
+
+<details class="item">
+  <summary>
+    <span class="item-name">Large Platter<span class="sub">4 cheeses &amp; 4 meats, same garnish as above</span></span>
+    <span class="chips"></span>
+    <span class="status-pill status-pending">Pending</span>
+  </summary>
+  <div class="item-body">
+    <p class="ingredients">Combined allergens of the Cheese Platter + Charcuterie Platter above, once every remaining label is confirmed.</p>
+  </div>
+</details>
+
+<footer>
+  <p><span class="todo">Still needed:</span> ciabatta bread label (covers 3 bruschetta), sourdough bread &amp; plain olive oil, blue cheese, pistachio, Pecorino, Manchego, Comté, Brillat-Savarin, Prosciutto, Bresaola, breadbasket bread, chutney — plus confirming whether the chilli-infused honey is really used on the cauliflower dish.</p>
+  <p>Once every component reads "confirmed," this working copy gets rebuilt as the plain, tick-only poster for the dining room — allergen names only, no ingredient lists.</p>
+</footer>
+
+</div>
+</body>
+</html>
