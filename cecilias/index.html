@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Cecilia's Wine House — Allergen Check</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Karla:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ink:#F3ECE2;
+  --ink-soft:#D3C0C9;
+  --ink-faint:#A6919B;
+  --gold:#D8B25C;
+  --gold-soft:rgba(216,178,92,0.16);
+  --glass-bg:rgba(255,255,255,0.055);
+  --glass-bg-strong:rgba(255,255,255,0.1);
+  --glass-border:rgba(216,178,92,0.2);
+  --glass-border-hover:rgba(216,178,92,0.55);
+  --shadow:0 10px 32px rgba(10,2,6,0.45);
+  --wine-950:#1D0810;
+  --wine-900:#33101B;
+
+  --confirmed:#9FD8A8;
+  --confirmed-bg:rgba(159,216,168,0.14);
+  --draft:#F0C168;
+  --draft-bg:rgba(240,193,104,0.16);
+
+  --chip-solid-bg:#F3ECE2;
+  --chip-solid-fg:#2A0A13;
+  --chip-trace-bg:rgba(255,255,255,0.08);
+  --chip-trace-fg:var(--ink-faint);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{-webkit-text-size-adjust:100%;font-size:18px;}
+@media(max-width:480px){html{font-size:19px;}}
+html,body{height:100%;}
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:'Karla',system-ui,sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(ellipse 80vw 55vh at 10% 3%, rgba(122,32,54,0.5), transparent 60%),
+    radial-gradient(ellipse 70vw 55vh at 92% 95%, rgba(76,21,36,0.5), transparent 60%),
+    linear-gradient(165deg, var(--wine-950), var(--wine-900) 55%, var(--wine-950));
+  background-attachment:fixed;
+  padding:0 0.85rem calc(3.5rem + env(safe-area-inset-bottom));
+}
+.wrap{max-width:900px;margin:0 auto;position:relative;z-index:1;}
+
+/* --- Sticky glass top bar --- */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:10;
+  margin:0 -0.85rem;
+  padding:calc(0.75rem + env(safe-area-inset-top)) 0.85rem 0.7rem;
+  background:rgba(29,8,16,0.82);
+  backdrop-filter:blur(18px) saturate(150%);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  border-bottom:1px solid var(--glass-border);
+}
+.crumbs{font-size:0.88rem;margin:0 0 0.55rem;}
+.crumbs a{color:var(--ink-faint);text-decoration:none;}
+.crumbs a:hover{color:var(--gold);}
+
+.search-row{position:relative;}
+.search-row svg{
+  position:absolute;
+  left:0.9rem;
+  top:50%;
+  transform:translateY(-50%);
+  width:17px;height:17px;
+  color:var(--ink-faint);
+  pointer-events:none;
+}
+.search-row input[type="text"]{
+  width:100%;
+  background:rgba(255,255,255,0.075);
+  border:1px solid var(--glass-border);
+  border-radius:13px;
+  padding:0.85rem 1rem 0.85rem 2.6rem;
+  color:var(--ink);
+  font-family:'Karla',sans-serif;
+  font-size:1.05rem;
+  min-height:50px;
+  outline:none;
+  transition:border-color 0.2s ease, background 0.2s ease;
+}
+.search-row input[type="text"]::placeholder{color:var(--ink-faint);}
+.search-row input[type="text"]:focus{border-color:var(--glass-border-hover);background:rgba(255,255,255,0.1);}
+
+/* --- Filter drawer --- */
+.filter-drawer{margin-top:0.65rem;}
+.filter-drawer summary{
+  list-style:none;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+  font-size:0.94rem;
+  font-weight:700;
+  color:var(--gold);
+  padding:0.4rem 0.1rem;
+  min-height:38px;
+}
+.filter-drawer summary::-webkit-details-marker{display:none;}
+.filter-drawer summary::before{content:"▸";font-size:0.78rem;transition:transform 0.18s ease;}
+.filter-drawer[open] summary::before{transform:rotate(90deg);}
+.filter-drawer summary .badge{
+  background:var(--gold-soft);
+  color:var(--gold);
+  font-size:0.78rem;
+  font-weight:700;
+  padding:0.12rem 0.55rem;
+  border-radius:99px;
+  display:none;
+}
+.filter-drawer summary .badge.show{display:inline-block;}
+
+.filter-body{padding:0.8rem 0 0.3rem;}
+.mode-row{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:0.7rem;
+  margin-bottom:0.85rem;
+}
+.mode-toggle{
+  display:inline-flex;
+  background:rgba(255,255,255,0.06);
+  border:1px solid var(--glass-border);
+  border-radius:99px;
+  padding:0.2rem;
+  gap:0.2rem;
+}
+.mode-toggle button{
+  border:none;
+  background:transparent;
+  color:var(--ink-soft);
+  font-family:'Karla',sans-serif;
+  font-size:0.86rem;
+  font-weight:700;
+  padding:0.55rem 1rem;
+  min-height:42px;
+  border-radius:99px;
+  cursor:pointer;
+  transition:background 0.2s ease, color 0.2s ease;
+}
+.mode-toggle button.active{background:var(--gold);color:#2A0A13;}
+
+.trace-toggle{
+  display:flex;
+  align-items:center;
+  gap:0.55rem;
+  font-size:0.88rem;
+  color:var(--ink-soft);
+  cursor:pointer;
+  user-select:none;
+  min-height:42px;
+}
+.trace-toggle input{accent-color:var(--gold);width:19px;height:19px;cursor:pointer;flex-shrink:0;}
+
+.chip-filter-row{
+  display:flex;
+  flex-wrap:nowrap;
+  gap:0.5rem;
+  overflow-x:auto;
+  padding-bottom:0.3rem;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.chip-filter-row::-webkit-scrollbar{display:none;}
+@media(min-width:700px){
+  .chip-filter-row{flex-wrap:wrap;overflow-x:visible;}
+}
+.chip-filter{
+  font-size:0.88rem;
+  font-weight:600;
+  padding:0.55rem 1rem;
+  min-height:42px;
+  border-radius:99px;
+  border:1px solid var(--glass-border);
+  background:rgba(255,255,255,0.04);
+  color:var(--ink-soft);
+  cursor:pointer;
+  transition:all 0.15s ease;
+  font-family:'Karla',sans-serif;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.chip-filter:active{transform:scale(0.96);}
+.chip-filter.selected{
+  background:var(--gold);
+  border-color:var(--gold);
+  color:#2A0A13;
+}
+
+header.page-header{
+  text-align:center;
+  padding:1.6rem 0 1.4rem;
+}
+.brand-mark{display:flex;justify-content:center;margin-bottom:0.6rem;}
+.brand-mark svg{width:24px;height:31px;color:var(--gold);}
+h1{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:clamp(1.7rem,7vw,2.7rem);
+  margin:0 0 0.55rem;
+  line-height:1.08;
+}
+h1 em{font-style:italic;font-weight:500;color:var(--gold);}
+header.page-header p{color:var(--ink-soft);font-size:0.98rem;max-width:480px;margin:0 auto;line-height:1.55;padding:0 0.5rem;}
+
+.results-count{
+  font-size:0.86rem;
+  color:var(--ink-faint);
+  margin:0.9rem 0 1.1rem;
+  text-align:center;
+}
+.results-count b{color:var(--gold);}
+
+.section-title{
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  font-size:1.4rem;
+  font-weight:500;
+  color:var(--gold);
+  margin:2.1rem 0 0.75rem;
+  padding-bottom:0.4rem;
+  border-bottom:1px solid var(--glass-border);
+  display:flex;
+  align-items:center;
+  gap:0.5rem;
+}
+.section-title:first-of-type{margin-top:0;}
+.section-title svg{width:15px;height:19px;flex-shrink:0;opacity:0.85;}
+
+.card{
+  background:var(--glass-bg);
+  border:1px solid var(--glass-border);
+  backdrop-filter:blur(16px) saturate(140%);
+  -webkit-backdrop-filter:blur(16px) saturate(140%);
+  border-radius:16px;
+  margin-bottom:0.75rem;
+  overflow:hidden;
+  transition:border-color 0.2s ease, background 0.2s ease;
+}
+.card:active{background:var(--glass-bg-strong);}
+@media(hover:hover){.card:hover{background:var(--glass-bg-strong);}}
+.card summary{
+  list-style:none;
+  cursor:pointer;
+  padding:1.15rem 1.15rem;
+  display:flex;
+  align-items:flex-start;
+  gap:0.7rem;
+}
+.card summary::-webkit-details-marker{display:none;}
+.toggle-icon{
+  flex-shrink:0;
+  width:1.2rem;
+  text-align:center;
+  font-weight:700;
+  font-size:1.3rem;
+  line-height:1.4rem;
+  color:var(--ink-faint);
+}
+.toggle-icon::before{content:"+";}
+.card[open] .toggle-icon::before{content:"–";}
+
+.summary-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:0.65rem;}
+.s-head{display:flex;justify-content:space-between;align-items:flex-start;gap:0.7rem;flex-wrap:wrap;}
+.item-name{font-weight:700;font-size:1.22rem;color:var(--ink);line-height:1.32;}
+.item-name .sub{display:block;font-weight:400;font-size:0.98rem;color:var(--ink-faint);margin-top:0.22rem;line-height:1.4;}
+.price{font-size:1.05rem;color:var(--ink-faint);font-variant-numeric:tabular-nums;flex-shrink:0;white-space:nowrap;}
+
+.s-meta{display:flex;flex-wrap:wrap;align-items:center;gap:0.55rem;}
+.chips{display:flex;flex-wrap:wrap;gap:0.5rem;}
+.chip{font-size:0.92rem;font-weight:700;padding:0.4rem 0.9rem;border-radius:99px;white-space:nowrap;}
+.chip-solid{background:var(--chip-solid-bg);color:var(--chip-solid-fg);}
+.chip-trace{background:var(--chip-trace-bg);color:var(--chip-trace-fg);font-weight:600;}
+.chip-none{background:transparent;color:var(--confirmed);border:1.4px solid var(--confirmed);}
+.chip-pending{background:transparent;color:var(--ink-faint);border:1.4px dashed var(--ink-faint);}
+
+.status-pill{
+  display:inline-flex;align-items:center;gap:0.3rem;
+  font-size:0.82rem;font-weight:700;letter-spacing:0.03em;text-transform:uppercase;
+  padding:0.3rem 0.75rem;border-radius:99px;flex-shrink:0;
+}
+.status-confirmed{background:var(--confirmed-bg);color:var(--confirmed);}
+.status-draft{background:var(--draft-bg);color:var(--draft);}
+.status-pending{background:rgba(255,255,255,0.06);color:var(--ink-faint);}
+
+.item-body{padding:0 1.15rem 1.3rem 3rem;border-top:1px solid var(--glass-border);margin-top:-1px;}
+.component{padding:0.9rem 0;border-bottom:1px dashed var(--glass-border);}
+.component:last-child{border-bottom:none;}
+.component-name{font-weight:700;font-size:1.03rem;color:var(--ink);margin-bottom:0.3rem;}
+.component-name .flag{font-weight:600;color:var(--draft);font-size:0.92rem;}
+.ingredients{font-size:1.03rem;color:var(--ink-soft);line-height:1.6;margin:0 0 0.4rem;}
+.contributes{font-size:1.01rem;color:var(--ink);line-height:1.55;}
+.contributes b{color:var(--gold);}
+.may-contain{font-size:0.95rem;color:var(--ink-faint);font-style:italic;line-height:1.55;}
+
+.empty-state{
+  text-align:center;
+  padding:3rem 1rem;
+  color:var(--ink-faint);
+  font-size:1.05rem;
+}
+
+footer{
+  margin-top:2.6rem;
+  padding-top:1.1rem;
+  border-top:1px solid var(--glass-border);
+  font-size:0.85rem;
+  color:var(--ink-faint);
+  line-height:1.6;
+  text-align:center;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="topbar">
+  <p class="crumbs"><a href="../">← All venues</a></p>
+  <div class="search-row">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input type="text" id="search" placeholder="Search a dish… halloumi, olives, cheese">
+  </div>
+  <details class="filter-drawer" id="filterDrawer">
+    <summary>Filter by allergen <span class="badge" id="filterBadge">0</span></summary>
+    <div class="filter-body">
+      <div class="mode-row">
+        <div class="mode-toggle" role="group" aria-label="Filter mode">
+          <button type="button" id="modeHide" class="active">Hide selected</button>
+          <button type="button" id="modeShow">Show only selected</button>
+        </div>
+        <label class="trace-toggle">
+          <input type="checkbox" id="includeTrace">
+          Also match "may contain" traces
+        </label>
+      </div>
+      <div class="chip-filter-row" id="allergenFilters"></div>
+    </div>
+  </details>
+</div>
+
+<header class="page-header">
+  <div class="brand-mark">
+    <svg viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3 C5 3 4 13 8 16 C10.3 17.7 13.7 17.7 16 16 C20 13 19 3 19 3 Z"/>
+      <path d="M12 17 L12 27"/>
+      <path d="M7 30 L17 30"/>
+      <path d="M12 27 C9.4 27 7.4 28.6 7 30 M12 27 C14.6 27 16.6 28.6 17 30"/>
+    </svg>
+  </div>
+  <h1>Cecilia's <em>Wine House</em></h1>
+  <p>This menu is still being mapped — most dishes are marked Pending until their ingredient labels are confirmed. Tap any dish to see progress.</p>
+</header>
+
+<p class="results-count" id="resultsCount"></p>
+
+<div id="menu"></div>
+
+<footer>
+  Allergens are declared per UK Food Information Regulations (14 major allergens). Dishes marked <b style="color:var(--ink-faint)">Pending</b> have no confirmed ingredient data yet — please check with a member of staff before ordering these. Dishes sharing a name with Traders Wine Bar are NOT assumed to share the same allergens — different kitchen, different suppliers.
+</footer>
+
+</div>
+
+<script>
+const ALLERGENS = {
+  CE:"Celery", GL:"Cereals (Gluten)", CR:"Crustaceans", EG:"Eggs", FI:"Fish",
+  LU:"Lupin", MI:"Milk", MO:"Molluscs", MU:"Mustard", NU:"Nuts",
+  PE:"Peanuts", SE:"Sesame", SO:"Soya", SU:"Sulphites"
+};
+
+const SECTION_ICONS = {
+  "Bruschetta & Flatbreads": '<svg viewBox="0 0 16 30" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 L10 2 L10 8 L12 11 L12 27 C12 28.5 10.5 29 8 29 C5.5 29 4 28.5 4 27 L4 11 L6 8 Z"/><path d="M4 15 L12 15"/></svg>',
+  "Fries": '<svg viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3 C5 3 4 13 8 16 C10.3 17.7 13.7 17.7 16 16 C20 13 19 3 19 3 Z"/><path d="M12 17 L12 27"/><path d="M7 30 L17 30"/><path d="M12 27 C9.4 27 7.4 28.6 7 30 M12 27 C14.6 27 16.6 28.6 17 30"/></svg>',
+  "Nibbles": '<svg viewBox="0 0 20 26" fill="currentColor"><circle cx="6" cy="16" r="4.2"/><circle cx="14" cy="16" r="4.2"/><circle cx="10" cy="9" r="4.2"/><circle cx="10" cy="21" r="4.2"/><path d="M10 2 C10 2 8 4 10 6" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>',
+  "Sharing Platters": '<svg viewBox="0 0 20 26" fill="currentColor"><circle cx="6" cy="16" r="4.2"/><circle cx="14" cy="16" r="4.2"/><circle cx="10" cy="9" r="4.2"/><circle cx="10" cy="21" r="4.2"/></svg>',
+  "Seasonal Specials": '<svg viewBox="0 0 24 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3 C5 3 4 13 8 16 C10.3 17.7 13.7 17.7 16 16 C20 13 19 3 19 3 Z"/><path d="M12 17 L12 27"/><path d="M7 30 L17 30"/><path d="M12 27 C9.4 27 7.4 28.6 7 30 M12 27 C14.6 27 16.6 28.6 17 30"/></svg>'
+};
+
+// All items pending — no ingredient labels photographed yet for this venue.
+// IMPORTANT: dishes sharing a name with Traders Wine Bar use a different kitchen/suppliers — do not copy allergens across venues.
+const DISHES = [
+{section:"Bruschetta & Flatbreads", name:"Cherry Tomato, Truffle and Mushroom Cream", price:"£12.50", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Bruschetta & Flatbreads", name:"Blue Cheese, Walnuts, Honey, Truffle Olive Oil", price:"£13.00", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Bruschetta & Flatbreads", name:"Flatbread, Feta, Mortadella, Pistachios, Hot Honey", price:"£13.00", status:"pending", allergens:[], trace:[], components:[]},
+
+{section:"Fries", name:"Truffle Oil and Parmesan Fries", price:"£8.50", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Fries", name:"Halloumi Fries", sub:"served with sweet chilli dip", price:"£10.50", status:"pending", allergens:[], trace:[], components:[]},
+
+{section:"Nibbles", name:"Roasted Almonds", price:"£5.50", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Nibbles", name:"Roasted Cashew", price:"£5.50", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Nibbles", name:"Green Olives", sub:"salted", price:"£6.50", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Nibbles", name:"Artisan Sourdough Bread Basket", price:"£6.00", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Nibbles", name:"Parmigiano Reggiano", sub:"24 months aged", price:"£7.50", status:"pending", allergens:[], trace:[], components:[]},
+
+{section:"Sharing Platters", name:"Cheese", sub:"selection of 4 cheeses, served with artisan sourdough bread", price:"£19.00", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Sharing Platters", name:"Charcuterie", sub:"selection of 4 meats, served with artisan sourdough bread", price:"£19.00", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Sharing Platters", name:"Grazing Platter", sub:"selection of 3 cheeses and 3 meats, served with artisan sourdough bread", price:"£29.50", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Sharing Platters", name:"King Size Platter", sub:"selection of 4 cheeses and 4 meats, served with artisan sourdough bread", price:"£38.00", status:"pending", allergens:[], trace:[], components:[]},
+
+{section:"Seasonal Specials", name:"Vegan 'Nduja Arancini", sub:"served with arrabiata sauce & vegan mayo", price:"£12.50", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Seasonal Specials", name:"Spinach, Ricotta & Smoked Provola Arancini", sub:"served with black olive tapenade, arrabbiata sauce & pesto", price:"£12.50", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Seasonal Specials", name:"Crispy Cauliflower Bites", price:"£11.00", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Seasonal Specials", name:"Chicken Goujons", sub:"served with rocket, grated Parmigiano, sweet chilli dip & posh mayonnaise", price:"£13.00", status:"pending", allergens:[], trace:[], components:[]},
+{section:"Seasonal Specials", name:"Greek Summer Salad", sub:"tomatoes, cucumber, white onion, bell pepper, oregano, feta, olives", price:"£13.00", status:"pending", allergens:[], trace:[], components:[]}
+];
+
+const SECTIONS = ["Bruschetta & Flatbreads","Fries","Nibbles","Sharing Platters","Seasonal Specials"];
+
+function chip(code, kind){
+  const cls = kind === "solid" ? "chip-solid" : "chip-trace";
+  return `<span class="chip ${cls}">${ALLERGENS[code]}</span>`;
+}
+
+function renderComponent(c){
+  return `<div class="component">
+    <div class="component-name">${c.name}</div>
+    ${c.ingredients ? `<p class="ingredients">${c.ingredients}</p>` : ""}
+    <p class="contributes">${c.contributes}</p>
+    ${c.may ? `<p class="may-contain">Label also warns: ${c.may}</p>` : ""}
+  </div>`;
+}
+
+function renderDish(d){
+  let chips;
+  if(d.status === "pending" && d.allergens.length === 0){
+    chips = `<span class="chip chip-pending">Awaiting ingredients</span>`;
+  } else {
+    chips = d.allergens.length
+      ? d.allergens.map(a=>chip(a,"solid")).join("")
+      : `<span class="chip chip-none">No allergens</span>`;
+  }
+  const traceChips = d.trace.map(a=>chip(a,"trace")).join("");
+  const statusLabel = d.status === "confirmed" ? "Confirmed" : (d.status === "draft" ? "Draft" : "Pending");
+  const statusClass = d.status === "confirmed" ? "status-confirmed" : (d.status === "draft" ? "status-draft" : "status-pending");
+  const body = d.components.length
+    ? d.components.map(renderComponent).join("")
+    : (d.note ? "" : "<p class=\"ingredients\">No ingredient labels photographed yet for this dish.</p>");
+  const noteHtml = d.note ? `<p class="may-contain" style="margin-top:0.4rem;">${d.note}</p>` : "";
+
+  return `<details class="card" data-name="${d.name.toLowerCase()}" data-allergens="${d.allergens.join(',')}" data-trace="${d.trace.join(',')}">
+    <summary>
+      <span class="toggle-icon"></span>
+      <div class="summary-main">
+        <div class="s-head">
+          <span class="item-name">${d.name}${d.sub ? `<span class="sub">${d.sub}</span>` : ""}</span>
+          <span class="price">${d.price}</span>
+        </div>
+        <div class="s-meta">
+          <span class="status-pill ${statusClass}">${statusLabel}</span>
+          <span class="chips">${chips}${traceChips}</span>
+        </div>
+      </div>
+    </summary>
+    <div class="item-body">${body}${noteHtml}</div>
+  </details>`;
+}
+
+const menuEl = document.getElementById("menu");
+function renderMenu(){
+  menuEl.innerHTML = SECTIONS.map(sec => {
+    const items = DISHES.filter(d=>d.section===sec).map(renderDish).join("");
+    return `<div class="section-block" data-section="${sec}">
+      <div class="section-title">${SECTION_ICONS[sec] || ""}${sec}</div>
+      ${items}
+    </div>`;
+  }).join("");
+}
+renderMenu();
+
+// --- Allergen filter chips ---
+const filterRow = document.getElementById("allergenFilters");
+const filterBadge = document.getElementById("filterBadge");
+let selectedAllergens = new Set();
+Object.entries(ALLERGENS).forEach(([code,name])=>{
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "chip-filter";
+  btn.textContent = name;
+  btn.dataset.code = code;
+  btn.addEventListener("click", ()=>{
+    if(selectedAllergens.has(code)){ selectedAllergens.delete(code); btn.classList.remove("selected"); }
+    else { selectedAllergens.add(code); btn.classList.add("selected"); }
+    updateBadge();
+    applyFilters();
+  });
+  filterRow.appendChild(btn);
+});
+
+function updateBadge(){
+  filterBadge.textContent = selectedAllergens.size;
+  filterBadge.classList.toggle("show", selectedAllergens.size > 0);
+}
+
+// --- Mode toggle ---
+let mode = "hide";
+const modeHideBtn = document.getElementById("modeHide");
+const modeShowBtn = document.getElementById("modeShow");
+modeHideBtn.addEventListener("click", ()=>{ mode="hide"; modeHideBtn.classList.add("active"); modeShowBtn.classList.remove("active"); applyFilters(); });
+modeShowBtn.addEventListener("click", ()=>{ mode="show"; modeShowBtn.classList.add("active"); modeHideBtn.classList.remove("active"); applyFilters(); });
+
+const includeTrace = document.getElementById("includeTrace");
+includeTrace.addEventListener("change", applyFilters);
+
+const searchInput = document.getElementById("search");
+searchInput.addEventListener("input", applyFilters);
+
+const resultsCount = document.getElementById("resultsCount");
+
+function applyFilters(){
+  const term = searchInput.value.trim().toLowerCase();
+  const cards = Array.from(document.querySelectorAll(".card"));
+  let visibleCount = 0;
+
+  cards.forEach(card=>{
+    const name = card.dataset.name;
+    const allergenSet = card.dataset.allergens.split(',').filter(Boolean);
+    const traceSet = card.dataset.trace.split(',').filter(Boolean);
+    const fullSet = includeTrace.checked ? allergenSet.concat(traceSet) : allergenSet;
+
+    const nameMatch = term === "" || name.includes(term);
+
+    let allergenMatch = true;
+    if(selectedAllergens.size > 0){
+      const hasAny = [...selectedAllergens].some(a=>fullSet.includes(a));
+      allergenMatch = mode === "hide" ? !hasAny : hasAny;
+    }
+
+    const visible = nameMatch && allergenMatch;
+    card.style.display = visible ? "" : "none";
+    if(visible) visibleCount++;
+  });
+
+  document.querySelectorAll(".section-block").forEach(block=>{
+    const anyVisible = Array.from(block.querySelectorAll(".card")).some(c=>c.style.display !== "none");
+    block.style.display = anyVisible ? "" : "none";
+  });
+
+  resultsCount.textContent = visibleCount === 0
+    ? "No dishes match — try clearing a filter."
+    : `Showing ${visibleCount} of ${cards.length} dishes`;
+}
+applyFilters();
+</script>
+</body>
+</html>
